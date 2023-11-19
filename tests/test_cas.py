@@ -1,6 +1,8 @@
 from flowmapper.cas import CAS
 import pytest
 
+
+
 def test_cas_format():
     assert CAS('96-49-1') == CAS('0000096-49-1')
 
@@ -14,3 +16,9 @@ def test_integer_cas():
 
 def test_cas_repr():
     repr('0000096-49-1') == '96-49-1'
+
+def test_equality_comparison_with_missing_cas():
+    assert not CAS('') == CAS('')
+
+def test_equality_comparison_with_newlines():
+    assert CAS('\t\n\n007440-05-3') == CAS('7440-05-3')

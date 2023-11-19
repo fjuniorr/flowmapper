@@ -8,13 +8,16 @@ class CAS():
         if not isinstance(cas, str):
             raise TypeError(f'cas should be a str, not {type(cas).__name__}')
         else:
-            self.cas = cas.lstrip('0')
+            self.cas = cas.strip().lstrip('0')
             self.digits = tuple(int(d) for d in self.cas[0:-1].replace('-', ''))
-            self.check_digit_actual = int(self.cas[-1])
     def __repr__(self):
         return self.cas
     def __eq__(self, other):
-        return self.cas == other.cas
+        if not self.cas and not other.cas:
+                result = False
+        else:
+            result = self.cas == other.cas
+        return result
     @cached_property
     def check_digit_expected(self):
         """
@@ -25,6 +28,9 @@ class CAS():
             for index, value in enumerate(self.digits[::-1], start=1)
         ]) % 10
         return result
+    @property
+    def check_digit_actual(self):
+        int(self.cas[-1])
     @property
     def valid(self):
         """

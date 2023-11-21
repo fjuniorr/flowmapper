@@ -1,4 +1,6 @@
 from flowmapper.match import match_identical_cas_numbers
+from flowmapper.flow import Flow
+from deepdiff import DeepDiff
 
 def test_match_identical_cas_numbers(fields):
     source = {
@@ -41,10 +43,11 @@ def test_match_identical_cas_numbers(fields):
         "MemoMapper": "Identical CAS numbers",
     }
 
-    assert actual == expected
+    diff = DeepDiff(actual, expected)
+    assert not diff
 
 
-def test_match_missing_cas_numbers():
+def test_match_missing_cas_numbers(fields):
     source = {
         "Flowable": "1-Propanol",
         "CAS No": "",
@@ -71,23 +74,6 @@ def test_match_missing_cas_numbers():
         "AltUnit": "",
         "Var": "",
         "Second CAS": "71-31-8; 19986-23-3; 71-23-8; 64118-40-7; 4712-36-1; 142583-61-7; 71-23-8",
-    }
-
-    fields = {
-        "source": {
-            "uuid": "Flow UUID",
-            "name": "Flowable",
-            "context": "Context",
-            "unit": "Unit",
-            "cas": "CAS No",
-        },
-        "target": {
-            "uuid": "FlowUUID",
-            "name": "Flowable",
-            "context": "Context",
-            "unit": "Unit",
-            "cas": "CASNo",
-        },
     }
 
     actual = match_identical_cas_numbers(source, target, fields)

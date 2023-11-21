@@ -44,7 +44,8 @@ testing = [
     "flowmapper",
     "pytest",
     "pytest-cov",
-    "python-coveralls"
+    "python-coveralls",
+    "deepdiff"
 ]
 dev = [
     "build",

@@ -1,5 +1,5 @@
 from flowmapper.match import match_mapped_name_differences
-
+from flowmapper.flow import Flow
 
 def test_match_mapped_name_differences(fields):
     source = {
@@ -20,7 +20,10 @@ def test_match_mapped_name_differences(fields):
         "FlowUUID": "831f48fc-ca00-4534-9ede-730190b3bee0",
     }
 
-    actual = match_mapped_name_differences(source, target, fields, mapping={'Flurochloridone': 'Fluorochloridone'}, memo = "Minor random name differences")
+    s = Flow.from_dict(source, fields['source'])
+    t = Flow.from_dict(target, fields['target'])
+
+    actual = match_mapped_name_differences(s, t, fields, mapping={'Flurochloridone': 'Fluorochloridone'}, memo = "Minor random name differences")
     expected = {
         "source": {
             "Flow UUID": "B0E6801E-D75E-4DDB-AE28-29530A8A57C2",

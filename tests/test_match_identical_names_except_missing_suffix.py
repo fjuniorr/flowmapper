@@ -1,5 +1,5 @@
 from flowmapper.match import match_identical_names_except_missing_suffix
-
+from flowmapper.flow import Flow
 
 def test_match_identical_names_except_missing_suffix(fields):
     source = {
@@ -18,7 +18,10 @@ def test_match_identical_names_except_missing_suffix(fields):
         "FlowUUID": "c3b659e5-35f1-408c-8cb5-b5f9b295c76e",
     }
 
-    actual = match_identical_names_except_missing_suffix(source, target, fields, suffix='ion')
+    s = Flow.from_dict(source, fields['source'])
+    t = Flow.from_dict(target, fields['target'])
+    
+    actual = match_identical_names_except_missing_suffix(s, t, fields, suffix='ion')
     expected = {
         "source": {
             "Flow UUID": "F277F190-A8A4-4A2D-AAF6-F6CB3772A545",

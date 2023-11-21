@@ -40,6 +40,29 @@ def test_flow_with_jsonpath_expr():
     assert flow.context.primary == "air"
     assert flow.context.secondary == "unspecified"
 
+def test_flow_from_sp_categories():
+    data = {
+        "name": "Carbon dioxide, in air",
+        "categories": ["Raw", "(unspecified)"],
+        "unit": "kg",
+        "CAS": "000124-38-9",
+    }
+
+    fields = {
+            "name": "name",
+            "context": ["categories[0]", "categories[1]"],
+            "unit": "unit",
+            "cas": "CAS",
+        }
+
+    flow = Flow.from_dict(data, fields)
+    assert flow.uuid == None
+    assert flow.name == 'Carbon dioxide, in air'
+    assert flow.context.full == 'Raw/(unspecified)'
+    assert flow.context.primary == 'Raw'
+    assert flow.context.secondary == '(unspecified)'
+    assert id(flow.raw) == id(data)
+
 def test_flow_from_sp_missing():
     data = {
         "name": "Chrysotile",

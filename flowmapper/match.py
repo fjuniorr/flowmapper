@@ -1,6 +1,5 @@
 import logging
 
-from .cas import CAS
 from .constants import (
     CONTEXT_MAPPING,
     MINOR_LAND_NAME_DIFFERENCES_MAPPING,

@@ -57,7 +57,7 @@ def test_flow_from_sp_categories():
         }
 
     flow = Flow.from_dict(data, fields)
-    assert flow.uuid == None
+    assert flow.uuid is None
     assert flow.name == 'Carbon dioxide, in air'
     assert flow.context.full == 'Raw/(unspecified)'
     assert flow.context.primary == 'Raw'

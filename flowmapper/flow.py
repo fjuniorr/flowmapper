@@ -7,7 +7,7 @@ from .context import Context
 
 
 @dataclass
-class Flow():
+class Flow:
     uuid: str = None
     name: str = None
     context: str = None

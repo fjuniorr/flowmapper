@@ -4,7 +4,7 @@ import flowmapper.jsonpath as jp
 
 
 @dataclass
-class Context():
+class Context:
     full: str = None
     primary: str = None
     secondary: str = None

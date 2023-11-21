@@ -26,7 +26,7 @@ def test_context_multiple_levels_list():
     expected = {'full': 'emission/air/troposphere/high', 'primary': 'emission/air', 'secondary': 'troposphere/high'}
     assert actual == expected
 
-def test_context_multiple_levels_list():
+def test_context_multiple_levels():
     data = {
         "name": "Carbon dioxide, in air",
         "categories": "emission/air",

@@ -1,7 +1,10 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+
+import flowmapper.jsonpath as jp
+
 from .cas import CAS
 from .context import Context
-import flowmapper.jsonpath as jp
+
 
 @dataclass
 class Flow():

@@ -1,5 +1,6 @@
 from flowmapper.context import Context
 
+
 def test_context():
     data = {
         "name": "Carbon dioxide, in air",

@@ -1,6 +1,8 @@
-from flowmapper.match import match_identical_cas_numbers
-from flowmapper.flow import Flow
 from deepdiff import DeepDiff
+
+from flowmapper.flow import Flow
+from flowmapper.match import match_identical_cas_numbers
+
 
 def test_match_identical_cas_numbers(fields):
     source = {

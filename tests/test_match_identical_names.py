@@ -1,6 +1,8 @@
-from flowmapper.match import match_identical_names
 from deepdiff import DeepDiff
+
 from flowmapper.flow import Flow
+from flowmapper.match import match_identical_names
+
 
 def test_match_identical_names(fields):
     source = {

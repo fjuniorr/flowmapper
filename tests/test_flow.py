@@ -1,5 +1,6 @@
-from flowmapper.flow import Flow
 from flowmapper.cas import CAS
+from flowmapper.flow import Flow
+
 
 def test_flow_with_jsonpath_expr():
     data =   {

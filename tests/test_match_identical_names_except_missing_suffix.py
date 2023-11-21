@@ -1,5 +1,6 @@
-from flowmapper.match import match_identical_names_except_missing_suffix
 from flowmapper.flow import Flow
+from flowmapper.match import match_identical_names_except_missing_suffix
+
 
 def test_match_identical_names_except_missing_suffix(fields):
     source = {

@@ -1,5 +1,6 @@
 from functools import cached_property
 
+
 class CAS():
     """
     Class for CAS Registry Numbers® (CAS RN®) that accepts padded or non-padded strings

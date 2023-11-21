@@ -1,5 +1,6 @@
-from flowmapper.match import match_mapped_name_differences
 from flowmapper.flow import Flow
+from flowmapper.match import match_mapped_name_differences
+
 
 def test_match_mapped_name_differences(fields):
     source = {

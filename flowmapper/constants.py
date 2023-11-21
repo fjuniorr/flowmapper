@@ -21,6 +21,11 @@ CONTEXT_MAPPING = {
     "water/ocean": "Waterborne emissions", 
     "water/surface water": "Waterborne emissions", 
     "water/unspecified": "Waterborne emissions", 
+    "social/unspecified": "Social issues",
+    "economic/primary production factor": "Economic issues",
+    "inventory indicator/output flow": None,
+    "inventory indicator/resource use": None,
+    "inventory indicator/waste": None,
 }
 
 RANDOM_NAME_DIFFERENCES_MAPPING = {

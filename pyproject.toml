@@ -29,7 +29,7 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "jsonpath-ng",
+    "glom",
 ]
 
 [project.urls]

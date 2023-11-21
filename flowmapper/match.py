@@ -9,12 +9,12 @@ def format_match_result(s: Flow, t: Flow, fields: dict, memo: str, is_match: boo
     if is_match:
         result = {
                 'source': {
-                    fields['source']['uuid'].replace("'", ""): s.uuid,
-                    fields['source']['name'].replace("'", ""): s.name,
-                    fields['source']['context'].replace("'", ""): s.context.full
+                    fields['source']['uuid']: s.uuid,
+                    fields['source']['name']: s.name,
+                    fields['source']['context']: s.context.full
                 },
                 'target': {
-                    fields['target']['uuid'].replace("'", ""): t.uuid,
+                    fields['target']['uuid']: t.uuid,
                 },
                 'conversionFactor': 1 if s.unit == t.unit else '?',
                 'MemoMapper': memo

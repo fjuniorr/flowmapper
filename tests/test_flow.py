@@ -29,10 +29,10 @@ def test_flow_with_jsonpath_expr():
 
     fields = {
         'cas': '@casNumber',
-        'context': ["compartment.compartment.'#text'", "compartment.subcompartment.'#text'"],
-        'name': "name.'#text'",
-        'unit': "unitName.'#text'",
-        'uuid': "'@id'"
+        'context': ["compartment.compartment.#text", "compartment.subcompartment.#text"],
+        'name': "name.#text",
+        'unit': "unitName.#text",
+        'uuid': "@id"
     }
 
     flow = Flow.from_dict(data, fields)
@@ -50,7 +50,7 @@ def test_flow_from_sp_categories():
 
     fields = {
             "name": "name",
-            "context": ["categories[0]", "categories[1]"],
+            "context": ["categories.0", "categories.1"],
             "unit": "unit",
             "cas": "CAS",
         }
@@ -72,7 +72,7 @@ def test_flow_from_sp_missing():
 
     fields = {
         "name": "name",
-        "context": ["context[0]", "context[1]"],
+        "context": ["context.0", "context.1"],
         "unit": "unit",
     }
 
@@ -98,11 +98,11 @@ def test_flow_from_sp():
     }
 
     fields = {
-        "uuid": "'Flow UUID'",
+        "uuid": "Flow UUID",
         "name": "Flowable",
         "context": "Context",
         "unit": "Unit",
-        "cas": "'CAS No'",
+        "cas": "CAS No",
     }
 
     flow = Flow.from_dict(data, fields)
@@ -137,4 +137,3 @@ def test_flow_from_ei():
 
     flow = Flow.from_dict(data, fields)
     assert flow.uuid == "5b7d620e-2238-5ec9-888a-6999218b6974"
-

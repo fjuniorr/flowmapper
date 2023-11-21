@@ -11,7 +11,7 @@ def test_basic_access():
   }
 
     assert jp.extract("name", data,) == "Chrysotile"
-    assert jp.extract("context[0]", data) == "Resources"
+    assert jp.extract("context.0", data) == "Resources"
 
 def test_special_characters():
     data = {
@@ -20,4 +20,4 @@ def test_special_characters():
     }
 
     assert jp.extract("@id", data) == "be73218b-18af-492e-96e6-addd309d1e32"
-    assert jp.extract("name.'#text'", data) == "Zinc, in ground"
+    assert jp.extract("name.#text", data) == "Zinc, in ground"

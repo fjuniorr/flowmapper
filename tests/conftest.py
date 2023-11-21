@@ -6,11 +6,11 @@ import pytest
 def fields():
     result = {
         "source": {
-            "uuid": "'Flow UUID'",
+            "uuid": "Flow UUID",
             "name": "Flowable",
             "context": "Context",
             "unit": "Unit",
-            "cas": "'CAS No'",
+            "cas": "CAS No",
         },
         "target": {
             "uuid": "FlowUUID",

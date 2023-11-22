@@ -1,13 +1,15 @@
 from functools import cached_property
 
-class CAS():
+
+class CAS:
     """
     Class for CAS Registry Numbers® (CAS RN®) that accepts padded or non-padded strings
     """
     def __init__(self, cas: str):
-        if not isinstance(cas, str):
+        if not isinstance(cas, str) and cas is not None:
             raise TypeError(f'cas should be a str, not {type(cas).__name__}')
         else:
+            cas = '' if cas is None else cas
             self.cas = cas.strip().lstrip('0')
             self.digits = tuple(int(d) for d in self.cas[0:-1].replace('-', ''))
     def __repr__(self):

@@ -1,6 +1,6 @@
-from flowmapper.cas import CAS
 import pytest
 
+from flowmapper.cas import CAS
 
 
 def test_cas_format():

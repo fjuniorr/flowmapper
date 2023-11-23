@@ -31,7 +31,7 @@ def test_match_identical_names_except_missing_suffix(fields):
         },
         "target": {"FlowUUID": "c3b659e5-35f1-408c-8cb5-b5f9b295c76e"},
         "conversionFactor": 1,
-        "MemoMapper": "Identical names except missing suffix",
+        "comment": "Identical names except missing suffix",
     }
 
     assert actual == expected

@@ -33,7 +33,7 @@ def test_match_identical_names(fields):
         },
         "target": {"FlowUUID": "cc6a1abb-b123-4ca6-8f16-38209df609be"},
         "conversionFactor": 1,
-        "MemoMapper": "Identical names",
+        "comment": "Identical names",
     }
 
     assert actual == expected

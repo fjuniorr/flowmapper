@@ -45,7 +45,7 @@ def test_match_identical_cas_numbers(fields):
         },
         "target": {"FlowUUID": "85500204-9d88-40ae-9f0b-3ceba0e7a74f"},
         "conversionFactor": 1,
-        "MemoMapper": "Identical CAS numbers",
+        "comment": "Identical CAS numbers",
     }
 
     diff = DeepDiff(actual, expected)

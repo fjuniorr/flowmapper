@@ -1,6 +1,9 @@
 from flowmapper.cas import CAS
 from flowmapper.flow import Flow
 
+def test_flow_init():
+    flow = Flow(name = "Ammonia")
+    assert flow.fields["name"] == "name"
 
 def test_flow_with_jsonpath_expr():
     data =   {

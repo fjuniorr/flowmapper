@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 
 import flowmapper.jsonpath as jp
 
@@ -13,6 +13,11 @@ class Flow:
     context: str = None
     unit: str = None
     cas: CAS = None
+    fields: dict = field(default_factory=lambda: {"uuid": "uuid", 
+                                                  "name": "name", 
+                                                  "context": "context", 
+                                                  "unit": "unit", 
+                                                  "cas":"cas"})
     raw: dict = None
 
     @classmethod
@@ -23,6 +28,7 @@ class Flow:
             context = Context.from_dict(d, fields['context']) if fields.get('context') else None,
             unit = jp.extract(fields['unit'], d) if fields.get('unit') else None,
             cas = CAS(jp.extract(fields['cas'], d)) if fields.get('cas') else CAS(''),
+            fields = fields.copy(),
             raw = d
         )
         return result

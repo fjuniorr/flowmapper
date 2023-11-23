@@ -34,8 +34,11 @@ def test_format_match_result_missing_id():
 
     t = Flow.from_dict(target, target_fields)
 
-    actual = format_match_result(s, t, {"source": source_fields, "target": target_fields}, is_match=True, comment="foo")
-    expected = {'source': {'name': 'Carbon dioxide, in air', 'context': 'Raw materials'}, 'target': {'id': 'cc6a1abb-b123-4ca6-8f16-38209df609be'}, 'conversionFactor': 1, 'comment': 'foo'}
+    actual = format_match_result(s, t, is_match=True, comment="foo")
+    expected = {'source': {'name': 'Carbon dioxide, in air', 'context': 'Raw materials'}, 
+                'target': {'id': 'cc6a1abb-b123-4ca6-8f16-38209df609be'}, 
+                'conversionFactor': 1, 
+                'comment': 'foo'}
 
     diff = DeepDiff(actual, expected)
     assert not diff

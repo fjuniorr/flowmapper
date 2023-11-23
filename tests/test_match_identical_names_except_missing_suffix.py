@@ -22,7 +22,7 @@ def test_match_identical_names_except_missing_suffix(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
     
-    actual = match_identical_names_except_missing_suffix(s, t, fields, suffix='ion')
+    actual = match_identical_names_except_missing_suffix(s, t, suffix='ion')
     expected = {
         "source": {
             "Flow UUID": "F277F190-A8A4-4A2D-AAF6-F6CB3772A545",

@@ -24,7 +24,7 @@ def test_match_identical_names(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_names(s, t, fields)
+    actual = match_identical_names(s, t)
     expected = {
         "source": {
             "Flow UUID": "32722990-B7D8-44A8-BC7D-EC3A89F533FF",
@@ -81,7 +81,7 @@ def test_match_identical_names_jsonpath():
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
     
-    actual = match_identical_names(s, t, fields)
+    actual = match_identical_names(s, t)
     expected = None
 
     diff = DeepDiff(actual, expected)

@@ -36,7 +36,7 @@ def test_match_identical_cas_numbers(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_cas_numbers(s, t, fields)
+    actual = match_identical_cas_numbers(s, t)
     expected = {
         "source": {
             "Flow UUID": "8C31919B-2D42-4CAD-A10E-8084CCD6BE99",
@@ -84,7 +84,7 @@ def test_match_missing_cas_numbers(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_cas_numbers(s, t, fields)
+    actual = match_identical_cas_numbers(s, t)
     expected = None
 
     assert actual == expected

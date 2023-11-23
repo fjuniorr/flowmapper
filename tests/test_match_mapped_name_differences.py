@@ -24,7 +24,7 @@ def test_match_mapped_name_differences(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_mapped_name_differences(s, t, fields, mapping={'Flurochloridone': 'Fluorochloridone'}, comment = "Minor random name differences")
+    actual = match_mapped_name_differences(s, t, mapping={'Flurochloridone': 'Fluorochloridone'}, comment = "Minor random name differences")
     expected = {
         "source": {
             "Flow UUID": "B0E6801E-D75E-4DDB-AE28-29530A8A57C2",

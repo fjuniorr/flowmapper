@@ -12,12 +12,15 @@ logger = logging.getLogger(__name__)
 
 def format_match_result(s: Flow, t: Flow, fields: dict, comment: str, is_match: bool):
     if is_match:
-        result = {
-                'source': {
-                    fields['source']['uuid']: s.uuid,
+        source_result = {
                     fields['source']['name']: s.name,
                     fields['source']['context']: s.context.full
-                },
+                }
+        if s.uuid:
+            source_result.update({fields['source']['uuid']: s.uuid})
+        
+        result = {
+                'source': source_result,
                 'target': {
                     fields['target']['uuid']: t.uuid,
                 },

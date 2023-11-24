@@ -32,25 +32,25 @@ def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
     return result
 
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    
-    is_match = s.cas == t.cas and s.context.full == CONTEXT_MAPPING[t.context.full]
+    is_match = s.cas == t.cas and s.context == t.context
 
     result = format_match_result(s, t, comment = comment, is_match = is_match)
     return result
 
 def match_identical_names(s: Flow, t: Flow, comment = 'Identical names'):
-    is_match = s.name == t.name and s.context.full == CONTEXT_MAPPING[t.context.full]
+    is_match = s.name == t.name and s.context == t.context
     
     result = format_match_result(s, t, comment = comment, is_match = is_match)
     return result
 
 def match_identical_names_except_missing_suffix(s: Flow, t: Flow, suffix, comment = 'Identical names except missing suffix'):
-    is_match = f"{s.name}, {suffix}" == t.name and s.context.full == CONTEXT_MAPPING[t.context.full]
+    is_match = f"{s.name}, {suffix}" == t.name and s.context == t.context
     
     result = format_match_result(s, t, comment = comment, is_match = is_match)
     return result
 
 def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped name differences'):    
-    is_match = mapping.get(s.name) == t.name and s.context.full == CONTEXT_MAPPING[t.context.full]
+    is_match = mapping.get(s.name) == t.name and s.context == t.context
     
     result = format_match_result(s, t, comment = comment, is_match = is_match)
     return result

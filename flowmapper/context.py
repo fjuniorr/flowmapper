@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass
+from .constants import CONTEXT_MAPPING
 
 import flowmapper.jsonpath as jp
-
 
 @dataclass
 class Context:
@@ -28,3 +28,10 @@ class Context:
 
     def to_dict(self):
         return asdict(self)
+
+    def __eq__(self, other):
+        if CONTEXT_MAPPING.get(self.full, self.full) == CONTEXT_MAPPING.get(other.full, other.full):
+            result = True
+        else:
+            result = False
+        return result

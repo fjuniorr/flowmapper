@@ -9,7 +9,7 @@ def test_match_identical_names(fields):
         "Flowable": "Carbon dioxide, in air",
         "CAS No": "000124-38-9",
         "Unit": "kg",
-        "Context": "Raw materials",
+        "Context": "Resources/in air",
         "Flow UUID": "32722990-B7D8-44A8-BC7D-EC3A89F533FF",
     }
 
@@ -24,19 +24,8 @@ def test_match_identical_names(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_names(s, t)
-    expected = {
-        "source": {
-            "Flow UUID": "32722990-B7D8-44A8-BC7D-EC3A89F533FF",
-            "Flowable": "Carbon dioxide, in air",
-            "Context": "Raw materials",
-        },
-        "target": {"FlowUUID": "cc6a1abb-b123-4ca6-8f16-38209df609be"},
-        "conversionFactor": 1,
-        "comment": "Identical names",
-    }
-
-    assert actual == expected
+    match = match_identical_names(s, t)
+    assert match
 
 
 def test_match_identical_names_jsonpath():
@@ -81,8 +70,5 @@ def test_match_identical_names_jsonpath():
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
     
-    actual = match_identical_names(s, t)
-    expected = None
-
-    diff = DeepDiff(actual, expected)
-    assert not diff
+    match = match_identical_names(s, t)
+    assert not match

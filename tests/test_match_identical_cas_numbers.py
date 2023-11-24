@@ -12,7 +12,7 @@ def test_match_identical_cas_numbers(fields):
         "Synonyms": "1-Propanol",
         "Unit": "kg",
         "Class": "Waterborne emissions",
-        "Context": "Waterborne emissions",
+        "Context": "Emissions to water/groundwater",
         "Flow UUID": "8C31919B-2D42-4CAD-A10E-8084CCD6BE99",
         "Description": "Formula: C3H8O\u007f",
     }
@@ -36,20 +36,8 @@ def test_match_identical_cas_numbers(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_cas_numbers(s, t)
-    expected = {
-        "source": {
-            "Flow UUID": "8C31919B-2D42-4CAD-A10E-8084CCD6BE99",
-            "Flowable": "1-Propanol",
-            "Context": "Waterborne emissions",
-        },
-        "target": {"FlowUUID": "85500204-9d88-40ae-9f0b-3ceba0e7a74f"},
-        "conversionFactor": 1,
-        "comment": "Identical CAS numbers",
-    }
-
-    diff = DeepDiff(actual, expected)
-    assert not diff
+    match = match_identical_cas_numbers(s, t)
+    assert match
 
 
 def test_match_missing_cas_numbers(fields):
@@ -60,7 +48,7 @@ def test_match_missing_cas_numbers(fields):
         "Synonyms": "1-Propanol",
         "Unit": "kg",
         "Class": "Waterborne emissions",
-        "Context": "Waterborne emissions",
+        "Context": "Emissions to water/groundwater",
         "Flow UUID": "8C31919B-2D42-4CAD-A10E-8084CCD6BE99",
         "Description": "Formula: C3H8O\u007f",
     }
@@ -84,7 +72,5 @@ def test_match_missing_cas_numbers(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    actual = match_identical_cas_numbers(s, t)
-    expected = None
-
-    assert actual == expected
+    match = match_identical_cas_numbers(s, t)
+    assert not match

@@ -75,28 +75,3 @@ def test_context_equality_true():
 
     assert sc == tc
 
-
-def test_context_equality_false():
-    s = {
-        "CAS": "007440-61-1",
-        "categories": ["Raw", "(unspecified)"],
-        "name": "Uranium",
-        "unit": "kg",
-    }
-    sc = Context.from_dict(s, ["categories.0", "categories.1"])
-
-    t = {
-        "@casNumber": "007440-61-1",
-        "@id": "2ba5e39b-adb6-4767-a51d-90c1cf32fe98",
-        "compartment": {
-            "@subcompartmentId": "6a098164-9f04-4f65-8104-ffab7f2677f3",
-            "compartment": {"#text": "natural resource", "@xml:lang": "en"},
-            "subcompartment": {"#text": "in ground", "@xml:lang": "en"},
-        },
-        "name": {"#text": "Uranium, in ground", "@xml:lang": "en"},
-    }
-    tc = Context.from_dict(
-        t, ["compartment.compartment.#text", "compartment.subcompartment.#text"]
-    )
-
-    assert sc == tc

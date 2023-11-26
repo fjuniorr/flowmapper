@@ -24,9 +24,10 @@ def match(source_flows, target_flows):
 
 def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
     if is_match:
+        source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
         source_result = {
                     s.fields['name']: s.name,
-                    s.fields['context']: s.context.full
+                    source_context_key: s.raw[source_context_key]
                 }
         if s.uuid:
             source_result.update({s.fields['uuid']: s.uuid})

@@ -4,10 +4,11 @@ import flowmapper.jsonpath as jp
 
 from .cas import CAS
 from .context import Context
-
+from .utils import generate_flow_id
 
 @dataclass
 class Flow:
+    id: str = None
     uuid: str = None
     name: str = None
     context: str = None
@@ -23,6 +24,7 @@ class Flow:
     @classmethod
     def from_dict(cls, d, fields):
         result = Flow(
+            id = generate_flow_id(d),
             uuid = jp.extract(fields['uuid'], d) if fields.get('uuid') else None,
             name = jp.extract(fields['name'], d) if fields.get('name') else None,
             context = Context.from_dict(d, fields['context']) if fields.get('context') else None,

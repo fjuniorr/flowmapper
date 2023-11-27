@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import hashlib
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -23,4 +24,10 @@ def read_field_mapping(filepath: Path):
             result['source'][key] = values[0]
             result['target'][key] = values[1]
     
+    return result
+
+
+def generate_flow_id(flow: dict):
+    flow_str = json.dumps(flow, sort_keys=True)
+    result = hashlib.md5(flow_str.encode('utf-8')).hexdigest()
     return result

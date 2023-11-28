@@ -1,0 +1,30 @@
+[
+    {
+        "@id": "09db39be-d9a6-4fc3-8d25-1f80b23e9131",
+        "@unitId": "487df68b-4994-4027-8fdc-a4dc298257b7",
+        "@casNumber": "000110-63-4",
+        "name": {
+          "@xml:lang": "en",
+          "#text": "1,4-Butanediol"
+        },
+        "unitName": {
+          "@xml:lang": "en",
+          "#text": "kg"
+        },
+        "compartment": {
+          "@subcompartmentId": "7011f0aa-f5f9-4901-8c10-884ad8296812",
+          "compartment": {
+            "@xml:lang": "en",
+            "#text": "air"
+          },
+          "subcompartment": {
+            "@xml:lang": "en",
+            "#text": "unspecified"
+          }
+        },
+        "synonym": {
+          "@xml:lang": "en",
+          "#text": "Butylene glycol"
+        }
+      }
+]

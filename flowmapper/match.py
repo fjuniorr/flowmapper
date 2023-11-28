@@ -10,18 +10,6 @@ from .flow import Flow
 
 logger = logging.getLogger(__name__)
 
-def match(source_flows, target_flows):
-    rules = match_rules()
-    mappings = []
-    for source_flow in tqdm(source_flows):
-        for target_flow in target_flows:
-            for rule in rules:
-                is_match = rule(source_flow, target_flow)
-                if is_match:
-                    mappings.append(is_match)
-                    break
-    return mappings
-
 def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
     if is_match:
         source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]

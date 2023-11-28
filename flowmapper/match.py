@@ -23,7 +23,10 @@ def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
         result = {
                 'source': source_result,
                 'target': {
-                    t.fields['uuid']: t.uuid,
+                    'uuid': t.uuid,
+                    'name': t.name,
+                    'context': t.context.full,
+                    'unit': t.unit
                 },
                 'conversionFactor': 1 if s.unit == t.unit else '?',
                 'comment': comment

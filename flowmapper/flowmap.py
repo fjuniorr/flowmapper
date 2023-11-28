@@ -2,9 +2,10 @@ from functools import cached_property
 from .flow import Flow
 from .match import match_rules
 from tqdm import tqdm
+from typing import Callable
 
 class Flowmap:
-    def __init__(self, source_flows: list[Flow] = None, target_flows: list[Flow] = None):
+    def __init__(self, source_flows: list[Flow], target_flows: list[Flow], rules: list[Callable[..., bool]] = None):
         self.source_flows = source_flows
         self.source_flows_dict = {flow.id:flow for flow in source_flows}
         self.source_flows_count = len(source_flows)
@@ -15,8 +16,8 @@ class Flowmap:
         self.target_flows_unique_count = len(self.target_flows)
         self.mappings_count = 0
         self.mapped_source_flows = 0
-        self.mappings = []
-        self.rules = match_rules()
+        self.mappings: list = []
+        self.rules = rules if rules else match_rules()
     
     def match(self):
         result = []

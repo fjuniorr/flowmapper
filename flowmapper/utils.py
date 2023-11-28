@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import hashlib
+import re
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -37,3 +38,7 @@ def read_flowlist(filepath: Path):
     with open(filepath, 'r') as fs:
         result = json.load(fs)
     return result
+
+def rm_parentheses_roman_numerals(x):
+    pattern = r'\(\s*([IVXLCDM]+)\s*\)'
+    return re.sub(pattern, r'\1', x)

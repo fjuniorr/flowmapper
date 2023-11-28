@@ -7,6 +7,7 @@ from .constants import (
     RANDOM_NAME_DIFFERENCES_MAPPING,
 )
 from .flow import Flow
+from .utils import rm_parentheses_roman_numerals
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,11 @@ def match_identical_names_except_missing_suffix(s: Flow, t: Flow, suffix, commen
 def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped name differences'):    
     is_match = mapping.get(s.name) == t.name and s.context == t.context
     
+    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    return result
+
+def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
+    is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
     result = format_match_result(s, t, comment = comment, is_match = is_match)
     return result
 

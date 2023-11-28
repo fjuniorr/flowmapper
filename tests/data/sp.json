@@ -1,0 +1,20 @@
+[
+    {
+        "name": "1,4-Butanediol",
+        "categories": [
+          "Air",
+          "(unspecified)"
+        ],
+        "unit": "kg",
+        "CAS": "000110-63-4"
+    },
+    {
+        "name": "1,4-Butanediol",
+        "categories": [
+          "Air",
+          "high. pop."
+        ],
+        "unit": "kg",
+        "CAS": "000110-63-4"
+    }
+]

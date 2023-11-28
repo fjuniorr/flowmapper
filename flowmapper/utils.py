@@ -31,3 +31,9 @@ def generate_flow_id(flow: dict):
     flow_str = json.dumps(flow, sort_keys=True)
     result = hashlib.md5(flow_str.encode('utf-8')).hexdigest()
     return result
+
+
+def read_flowlist(filepath: Path):
+    with open(filepath, 'r') as fs:
+        result = json.load(fs)
+    return result

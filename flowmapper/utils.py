@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import hashlib
 import re
+from typing import Optional
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -44,7 +45,7 @@ def rm_parentheses_roman_numerals(x):
     return re.sub(pattern, r'\1', x)
 
 
-def extract_country_code(s: str) -> tuple[str, None | str]:
+def extract_country_code(s: str) -> tuple[str, Optional[str]]:
     # Regex to find a two-letter uppercase code following a comma and optional whitespace
     match = re.search(r',\s*([A-Z]{2})$', s)
 

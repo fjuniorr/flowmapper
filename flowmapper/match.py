@@ -12,32 +12,29 @@ from .utils import rm_parentheses_roman_numerals, extract_country_code
 logger = logging.getLogger(__name__)
 
 def format_match_result(s: Flow, t: Flow, match_info: dict):
-    if match_info['is_match']:
-        source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
-        source_result = {
-                    s.fields['name']: s.name,
-                    source_context_key: s.raw[source_context_key]
-                }
-        if s.uuid:
-            source_result.update({s.fields['uuid']: s.uuid})
-        
-        target_result = {
-                    'uuid': t.uuid,
-                    'name': t.name,
-                    'context': t.context.full,
-                    'unit': t.unit
-                }
-        if match_info.get('location'):
-            target_result.update({'location': match_info['location']})
-
-        result = {
-                'source': source_result,
-                'target': target_result,
-                'conversionFactor': 1 if s.unit == t.unit else '?',
-                'comment': match_info['comment']
+    source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
+    source_result = {
+                s.fields['name']: s.name,
+                source_context_key: s.raw[source_context_key]
             }
-    else:
-        result = None
+    if s.uuid:
+        source_result.update({s.fields['uuid']: s.uuid})
+    
+    target_result = {
+                'uuid': t.uuid,
+                'name': t.name,
+                'context': t.context.full,
+                'unit': t.unit
+            }
+    if match_info.get('location'):
+        target_result.update({'location': match_info['location']})
+
+    result = {
+            'source': source_result,
+            'target': target_result,
+            'conversionFactor': 1 if s.unit == t.unit else '?',
+            'comment': match_info['comment']
+        }
     return result
 
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    

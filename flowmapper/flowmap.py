@@ -1,6 +1,6 @@
 from functools import cached_property
 from .flow import Flow
-from .match import match_rules
+from .match import match_rules, format_match_result
 from tqdm import tqdm
 from typing import Callable
 
@@ -27,17 +27,26 @@ class Flowmap:
                     is_match = rule(s, t)
                     if is_match:
                         result.append(
-                            {'from': s.id,
-                             'to': t.id,
+                            {'from': s,
+                             'to': t,
                              'info': is_match}
                         )
                         break
         self.mappings = result
         self.mappings_count = len(result)
-        self.mapped_source_flows = len({link['from'] for link in result})
+        self.mapped_source_flows = len({link['from'].id for link in result})
         self.statistics()
     
     def statistics(self):
         print(f'{self.source_flows_unique_count} unique source flows...')
         print(f'{self.target_flows_unique_count} unique target flows...')
         print(f'{self.mappings_count} mappings of {self.mapped_source_flows} unique source flows ({self.mapped_source_flows / self.source_flows_unique_count:.2%} of total).')
+
+    def to_randonneur(self):
+        result = [
+            format_match_result(map_entry['from'], 
+                                map_entry['to'],
+                                map_entry['info']) 
+            for map_entry in self.mappings
+        ]
+        return result

@@ -42,3 +42,16 @@ def read_flowlist(filepath: Path):
 def rm_parentheses_roman_numerals(x):
     pattern = r'\(\s*([IVXLCDM]+)\s*\)'
     return re.sub(pattern, r'\1', x)
+
+
+def extract_country_code(s: str) -> tuple[str, None | str]:
+    # Regex to find a two-letter uppercase code following a comma and optional whitespace
+    match = re.search(r',\s*([A-Z]{2})$', s)
+
+    if match:
+        # Extract the country code and the preceding part of the string
+        country_code = match.group(1)
+        rest_of_string = s[:match.start()].strip()
+        return (rest_of_string, country_code)
+    else:
+        return (s, None)

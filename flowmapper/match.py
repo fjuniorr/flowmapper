@@ -7,7 +7,7 @@ from .constants import (
     RANDOM_NAME_DIFFERENCES_MAPPING,
 )
 from .flow import Flow
-from .utils import rm_parentheses_roman_numerals
+from .utils import rm_parentheses_roman_numerals, extract_country_code
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +63,15 @@ def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped n
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
     is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
     result = format_match_result(s, t, comment = comment, is_match = is_match)
+    return result
+
+def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with country code'):
+    s_name, s_location = extract_country_code(s.name)
+    if s_location:
+        is_match = s_name == t.name and s.context == t.context
+    else:
+        is_match = False
+    result = format_match_result(s, t, comment = f'{comment} {s_location}', is_match = is_match)
     return result
 
 def match_resources_with_suffix_in_ground(s: Flow, t: Flow):

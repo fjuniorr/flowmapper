@@ -96,5 +96,7 @@ def match_rules():
             match_emissions_with_suffix_ion,
             match_minor_land_name_differences,
             match_missing_fossil_and_biogenic_carbon,
+            match_names_with_roman_numerals_in_parentheses,
+            match_names_with_country_codes,
             match_identical_cas_numbers,
     ]

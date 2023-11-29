@@ -34,7 +34,7 @@ def test_format_match_result_missing_id():
 
     t = Flow.from_dict(target, target_fields)
 
-    actual = format_match_result(s, t, is_match=True, comment="foo")
+    actual = format_match_result(s, t, {'is_match': True, 'comment': 'foo'})
     expected = {'source': {'name': 'Carbon dioxide, in air', 'context': 'Raw materials'}, 
                 'target': {'uuid': 'cc6a1abb-b123-4ca6-8f16-38209df609be', 
                            'name': 'Carbon dioxide, in air',

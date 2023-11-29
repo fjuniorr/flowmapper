@@ -11,8 +11,8 @@ from .utils import rm_parentheses_roman_numerals, extract_country_code
 
 logger = logging.getLogger(__name__)
 
-def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
-    if is_match:
+def format_match_result(s: Flow, t: Flow, match_info: dict):
+    if match_info['is_match']:
         source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
         source_result = {
                     s.fields['name']: s.name,
@@ -21,16 +21,20 @@ def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
         if s.uuid:
             source_result.update({s.fields['uuid']: s.uuid})
         
-        result = {
-                'source': source_result,
-                'target': {
+        target_result = {
                     'uuid': t.uuid,
                     'name': t.name,
                     'context': t.context.full,
                     'unit': t.unit
-                },
+                }
+        if match_info.get('location'):
+            target_result.update({'location': match_info['location']})
+
+        result = {
+                'source': source_result,
+                'target': target_result,
                 'conversionFactor': 1 if s.unit == t.unit else '?',
-                'comment': comment
+                'comment': match_info['comment']
             }
     else:
         result = None
@@ -39,30 +43,30 @@ def format_match_result(s: Flow, t: Flow, comment: str, is_match: bool):
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    
     is_match = s.cas == t.cas and s.context == t.context
 
-    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
     return result
 
 def match_identical_names(s: Flow, t: Flow, comment = 'Identical names'):
     is_match = s.name == t.name and s.context == t.context
     
-    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
     return result
 
 def match_identical_names_except_missing_suffix(s: Flow, t: Flow, suffix, comment = 'Identical names except missing suffix'):
     is_match = f"{s.name}, {suffix}" == t.name and s.context == t.context
     
-    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
     return result
 
 def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped name differences'):    
     is_match = mapping.get(s.name) == t.name and s.context == t.context
     
-    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
     return result
 
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
     is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
-    result = format_match_result(s, t, comment = comment, is_match = is_match)
+    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
     return result
 
 def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with country code'):
@@ -71,7 +75,7 @@ def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with count
         is_match = s_name == t.name and s.context == t.context
     else:
         is_match = False
-    result = format_match_result(s, t, comment = f'{comment} {s_location}', is_match = is_match)
+    result = format_match_result(s, t, {'is_match': is_match, 'comment': comment, 'location': s_location})
     return result
 
 def match_resources_with_suffix_in_ground(s: Flow, t: Flow):

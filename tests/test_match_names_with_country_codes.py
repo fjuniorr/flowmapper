@@ -11,8 +11,8 @@ def test_match_names_with_country_codes():
     actual = match_names_with_country_codes(s, t)
     expected = {
         "source": {"name": "Ammonia, NL", "context": "air"},
-        "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": None},
+        "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": None, "location": "NL"},
         "conversionFactor": 1,
-        "comment": "Names with country code NL",
+        "comment": "Names with country code",
     }
     assert actual == expected

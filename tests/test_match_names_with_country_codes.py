@@ -1,7 +1,5 @@
 from flowmapper.flow import Flow
-from flowmapper.context import Context
 from flowmapper.match import match_names_with_country_codes
-
 
 def test_match_names_with_country_codes():
     fields = {"name": "name", "context": "context"}
@@ -10,9 +8,6 @@ def test_match_names_with_country_codes():
 
     actual = match_names_with_country_codes(s, t)
     expected = {
-        "source": {"name": "Ammonia, NL", "context": "air"},
-        "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": None, "location": "NL"},
-        "conversionFactor": 1,
-        "comment": "Names with country code",
+        "comment": "Names with country code", "location": "NL"
     }
     assert actual == expected

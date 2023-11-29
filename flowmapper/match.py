@@ -42,41 +42,39 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
 
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    
     is_match = s.cas == t.cas and s.context == t.context
-
-    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
-    return result
+    if is_match:
+        return {'comment': comment}
 
 def match_identical_names(s: Flow, t: Flow, comment = 'Identical names'):
     is_match = s.name == t.name and s.context == t.context
     
-    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
-    return result
+    if is_match:
+        return {'comment': comment}
 
 def match_identical_names_except_missing_suffix(s: Flow, t: Flow, suffix, comment = 'Identical names except missing suffix'):
     is_match = f"{s.name}, {suffix}" == t.name and s.context == t.context
     
-    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
-    return result
+    if is_match:
+        return {'comment': comment}
 
 def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped name differences'):    
     is_match = mapping.get(s.name) == t.name and s.context == t.context
     
-    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
-    return result
+    if is_match:
+        return {'comment': comment}
 
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
     is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
-    result = format_match_result(s, t, {'comment': comment, 'is_match': is_match})
-    return result
+    
+    if is_match:
+        return {'comment': comment}
 
 def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with country code'):
     s_name, s_location = extract_country_code(s.name)
-    if s_location:
-        is_match = s_name == t.name and s.context == t.context
-    else:
-        is_match = False
-    result = format_match_result(s, t, {'is_match': is_match, 'comment': comment, 'location': s_location})
-    return result
+    is_match = s_location and s_name == t.name and s.context == t.context
+    
+    if is_match:
+        return {'comment': comment, 'location': s_location}
 
 def match_resources_with_suffix_in_ground(s: Flow, t: Flow):
     return match_identical_names_except_missing_suffix(s, t, suffix = 'in ground', comment = 'Resources with suffix in ground')

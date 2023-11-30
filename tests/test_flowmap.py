@@ -22,7 +22,7 @@ def test_flowmap(source_flows, target_flows):
                 "context": "air/unspecified",
                 "unit": "kg",
             },
-            "conversionFactor": 1,
+            "conversion_factor": 1,
             "comment": "Identical names",
         }
     ]
@@ -57,7 +57,7 @@ def test_flowmap_with_custom_rules_match(source_flows, target_flows):
                 "context": "air/unspecified",
                 "unit": "kg",
             },
-            "conversionFactor": 1,
+            "conversion_factor": 1,
             "comment": "Identical names",
         }
     ]

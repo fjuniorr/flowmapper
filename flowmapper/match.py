@@ -7,7 +7,7 @@ from .constants import (
     RANDOM_NAME_DIFFERENCES_MAPPING,
 )
 from .flow import Flow
-from .utils import rm_parentheses_roman_numerals, extract_country_code
+from .utils import rm_parentheses_roman_numerals, extract_country_code, rm_roman_numerals_ionic_state
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +73,12 @@ def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with count
     if is_match:
         return {'comment': comment, 'location': s_location}
 
+def match_non_ionic_state(s: Flow, t: Flow, comment = 'Non-ionic state if no better match'):
+    is_match = rm_roman_numerals_ionic_state(s.name) == t.name and s.context == t.context
+
+    if is_match:
+        return {'comment': comment}
+
 def match_resources_with_suffix_in_ground(s: Flow, t: Flow):
     return match_identical_names_except_missing_suffix(s, t, suffix = 'in ground', comment = 'Resources with suffix in ground')
 
@@ -99,4 +105,5 @@ def match_rules():
             match_names_with_roman_numerals_in_parentheses,
             match_names_with_country_codes,
             match_identical_cas_numbers,
+            match_non_ionic_state,
     ]

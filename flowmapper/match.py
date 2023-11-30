@@ -40,7 +40,7 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
     result = {
             'source': source_result,
             'target': target_result,
-            'conversionFactor': conversion_factor,
+            'conversion_factor': conversion_factor,
             'comment': match_info['comment']
         }
     return result

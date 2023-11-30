@@ -3,6 +3,7 @@ from .flow import Flow
 from .match import match_rules, format_match_result
 from tqdm import tqdm
 from typing import Callable
+import pandas as pd
 
 class Flowmap:
     def __init__(self, source_flows: list[Flow], target_flows: list[Flow], rules: list[Callable[..., bool]] = None):
@@ -48,5 +49,45 @@ class Flowmap:
                                 map_entry['to'],
                                 map_entry['info']) 
             for map_entry in self.mappings
+        ]
+        return result
+
+    def to_glad(self):
+        data = []
+        for map_entry in self.mappings:
+            row = {
+                    'SourceFlowName': map_entry['from'].name,
+                    'SourceFlowUUID': map_entry['from'].uuid,
+                    'SourceFlowContext': map_entry['from'].context.full,
+                    'SourceUnit': map_entry['from'].unit,
+                    'MatchCondition': '',
+                    'ConversionFactor': map_entry['info'].get('conversion_factor'),
+                    'TargetFlowName': map_entry['to'].name,
+                    'TargetFlowUUID': map_entry['to'].uuid,
+                    'TargetFlowContext': map_entry['to'].context.full,
+                    'TargetUnit': map_entry['to'].unit,
+                    'MemoMapper': map_entry['info'].get('comment')
+                }
+            data.append(row)
+
+        return pd.DataFrame(data)        
+
+    @cached_property
+    def matched(self):
+        mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
+        result = [
+            flow.raw 
+            for flow in self.source_flows 
+            if flow.id in mapped_flows
+        ]
+        return result
+
+    @cached_property
+    def unmatched(self):
+        mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
+        result = [
+            flow.raw 
+            for flow in self.source_flows 
+            if flow.id not in mapped_flows
         ]
         return result

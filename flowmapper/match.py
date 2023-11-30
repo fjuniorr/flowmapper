@@ -5,6 +5,7 @@ from .constants import (
     MINOR_LAND_NAME_DIFFERENCES_MAPPING,
     MISSING_FOSSIL_AND_BIOGENIC_CARBON_MAPPING,
     RANDOM_NAME_DIFFERENCES_MAPPING,
+    NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING,
 )
 from .flow import Flow
 from .utils import rm_parentheses_roman_numerals, extract_country_code, rm_roman_numerals_ionic_state
@@ -29,10 +30,17 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
     if match_info.get('location'):
         target_result.update({'location': match_info['location']})
 
+    if match_info.get('multiplier'):
+        conversion_factor = match_info.get('multiplier')
+    elif s.unit == t.unit:
+        conversion_factor = 1
+    else:
+        conversion_factor = '?'
+
     result = {
             'source': source_result,
             'target': target_result,
-            'conversionFactor': 1 if s.unit == t.unit else '?',
+            'conversionFactor': conversion_factor,
             'comment': match_info['comment']
         }
     return result
@@ -59,6 +67,13 @@ def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped n
     
     if is_match:
         return {'comment': comment}
+
+def match_mapped_name_differences_with_unit_conversion(s: Flow, t: Flow, comment = 'Mapped name differences with unit conversions'):
+    s_name = NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING.get(s.name)
+    if s_name:
+        is_match = s_name.get('name') == t.name and s.context == t.context
+        if is_match:
+            return {'comment': comment, 'multiplier': NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING[s.name].get('multiplier')}
 
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
     is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
@@ -110,6 +125,7 @@ def match_rules():
             match_missing_fossil_and_biogenic_carbon,
             match_names_with_roman_numerals_in_parentheses,
             match_names_with_country_codes,
+            match_mapped_name_differences_with_unit_conversion,
             match_identical_cas_numbers,
             match_non_ionic_state,
             match_biogenic_to_non_fossil,

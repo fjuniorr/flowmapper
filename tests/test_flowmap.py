@@ -87,7 +87,7 @@ def test_flowmap_to_glad(source_flows, target_flows):
 def test_flowmap_export_matched(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
     flowmap.match()
-    actual = flowmap.matched
+    actual = flowmap.matched_source
     expected = [
         {
             "name": "1,4-Butanediol",
@@ -102,7 +102,7 @@ def test_flowmap_export_matched(source_flows, target_flows):
 def test_flowmap_export_unmatched(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
     flowmap.match()
-    actual = flowmap.unmatched
+    actual = flowmap.unmatched_source
     expected = [
         {
             "name": "1,4-Butanediol",

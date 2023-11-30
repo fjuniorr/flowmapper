@@ -19,7 +19,7 @@ def test_match_non_ionic_state():
         {
             "source": {"name": "Mercury (II)", "context": "air"},
             "target": {"uuid": None, "name": "Mercury", "context": "air", "unit": None},
-            "conversionFactor": 1,
+            "conversion_factor": 1,
             "comment": "Non-ionic state if no better match",
         },
         {
@@ -30,7 +30,7 @@ def test_match_non_ionic_state():
                 "context": "air",
                 "unit": None,
             },
-            "conversionFactor": 1,
+            "conversion_factor": 1,
             "comment": "With/without roman numerals in parentheses",
         },
     ]

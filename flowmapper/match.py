@@ -32,7 +32,7 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
     result = {
             'source': source_result,
             'target': target_result,
-            'conversionFactor': 1 if s.unit == t.unit else '?',
+            'conversion_factor': 1 if s.unit == t.unit else '?',
             'comment': match_info['comment']
         }
     return result

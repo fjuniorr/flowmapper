@@ -40,7 +40,7 @@ def test_format_match_result_missing_id():
                            'name': 'Carbon dioxide, in air',
                            'context': 'natural resource/in air',
                            'unit': 'kg'}, 
-                'conversionFactor': 1, 
+                'conversion_factor': 1,
                 'comment': 'foo'}
 
     diff = DeepDiff(actual, expected)

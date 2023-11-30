@@ -79,6 +79,12 @@ def match_non_ionic_state(s: Flow, t: Flow, comment = 'Non-ionic state if no bet
     if is_match:
         return {'comment': comment}
 
+def match_biogenic_to_non_fossil(s: Flow, t: Flow, comment = 'Biogenic to non-fossil if no better match'):
+    is_match = s.name.removesuffix(', biogenic') == t.name.removesuffix(', non-fossil') and s.context == t.context
+
+    if is_match:
+        return {'comment': comment}
+
 def match_resources_with_suffix_in_ground(s: Flow, t: Flow):
     return match_identical_names_except_missing_suffix(s, t, suffix = 'in ground', comment = 'Resources with suffix in ground')
 
@@ -106,4 +112,5 @@ def match_rules():
             match_names_with_country_codes,
             match_identical_cas_numbers,
             match_non_ionic_state,
+            match_biogenic_to_non_fossil,
     ]

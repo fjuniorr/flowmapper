@@ -45,10 +45,12 @@ def map(
     source: Annotated[Path, typer.Argument(help='Path to source flowlist')],
     target: Annotated[Path, typer.Argument(help='Path to target flowlist')],
     fields: Annotated[Path, typer.Option(help='Relationship between fields in source and target flowlists')],
-    matched: Annotated[bool, typer.Option(help='Write original matched flows into separate file?')] = False,
-    unmatched: Annotated[bool, typer.Option(help='Write original unmatched flows into separate file?')] = True,
     output_dir: Annotated[Path, typer.Option(help='Directory to save mapping and diagnostics files')] = Path('.'),
-    format: Annotated[OutputFormat, typer.Option(help='Mapping file output format', case_sensitive=False)] = 'all'
+    format: Annotated[OutputFormat, typer.Option(help='Mapping file output format', case_sensitive=False)] = 'all',
+    unmatched_source: Annotated[bool, typer.Option(help='Write original source unmatched flows into separate file?')] = True,
+    unmatched_target: Annotated[bool, typer.Option(help='Write original target unmatched flows into separate file?')] = True,
+    matched_source: Annotated[bool, typer.Option(help='Write original source matched flows into separate file?')] = False,
+    matched_target: Annotated[bool, typer.Option(help='Write original target matched flows into separate file?')] = False,
 ):
     """
     Generate mappings between elementary flows lists
@@ -63,14 +65,22 @@ def map(
 
     stem = f'{source.stem}-{target.stem}'
 
-    if matched:
-        with open(output_dir / f'{stem}-matched.json', 'w') as fs:
-            json.dump(flowmap.matched, fs, indent=True)
+    if matched_source:
+        with open(output_dir / f'{source.stem}-matched.json', 'w') as fs:
+            json.dump(flowmap.matched_source, fs, indent=True)
 
-    if unmatched:
-        with open(output_dir / f'{stem}-unmatched.json', 'w') as fs:
-            json.dump(flowmap.unmatched, fs, indent=True)
-    
+    if unmatched_source:
+        with open(output_dir / f'{source.stem}-unmatched.json', 'w') as fs:
+            json.dump(flowmap.unmatched_source, fs, indent=True)
+
+    if matched_target:
+        with open(output_dir / f'{target.stem}-matched.json', 'w') as fs:
+            json.dump(flowmap.matched_target, fs, indent=True)
+
+    if unmatched_target:
+        with open(output_dir / f'{target.stem}-unmatched.json', 'w') as fs:
+            json.dump(flowmap.unmatched_target, fs, indent=True)
+
     if format.value == 'randonneur':
         with open(output_dir / f'{stem}.json', 'w') as fs:
             json.dump(flowmap.to_randonneur(), fs, indent=2)

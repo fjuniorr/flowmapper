@@ -73,7 +73,7 @@ class Flowmap:
         return pd.DataFrame(data)        
 
     @cached_property
-    def matched(self):
+    def matched_source(self):
         mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
         result = [
             flow.raw 
@@ -83,11 +83,31 @@ class Flowmap:
         return result
 
     @cached_property
-    def unmatched(self):
+    def unmatched_source(self):
         mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
         result = [
             flow.raw 
             for flow in self.source_flows 
+            if flow.id not in mapped_flows
+        ]
+        return result
+
+    @cached_property
+    def matched_target(self):
+        mapped_flows = {map_entry['to'].id for map_entry in self.mappings}
+        result = [
+            flow.raw 
+            for flow in self.target_flows 
+            if flow.id in mapped_flows
+        ]
+        return result
+
+    @cached_property
+    def unmatched_target(self):
+        mapped_flows = {map_entry['to'].id for map_entry in self.mappings}
+        result = [
+            flow.raw 
+            for flow in self.target_flows 
             if flow.id not in mapped_flows
         ]
         return result

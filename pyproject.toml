@@ -31,7 +31,8 @@ requires-python = ">=3.9"
 dependencies = [
     "glom",
     "tqdm",
-    "pandas"
+    "pandas[excel]",
+    "typer"
 ]
 
 [project.urls]
@@ -57,6 +58,9 @@ dev = [
     "pytest-cov",
     "setuptools",
 ]
+
+[project.scripts]
+flowmapper = "flowmapper.cli:app"
 
 [tool.setuptools]
 license-files = ["LICENSE"]

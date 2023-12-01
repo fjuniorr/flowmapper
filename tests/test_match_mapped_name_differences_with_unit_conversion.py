@@ -14,7 +14,6 @@ def test_match_non_ionic_state():
     ]
 
     flowmap = Flowmap(s, t)
-    flowmap.match()
     actual = flowmap.to_randonneur()
     expected = [
         {

@@ -8,7 +8,6 @@ from flowmapper.match import (
 
 def test_flowmap_to_randonneur(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
-    flowmap.match()
     actual = flowmap.to_randonneur()
     expected = [
         {
@@ -35,7 +34,6 @@ def test_flowmap_with_custom_rules_no_match(source_flows, target_flows):
         target_flows,
         rules=[match_emissions_with_suffix_ion, match_minor_land_name_differences],
     )
-    flowmap.match()
     actual = flowmap.mappings
     expected = []
     assert actual == expected
@@ -43,7 +41,6 @@ def test_flowmap_with_custom_rules_no_match(source_flows, target_flows):
 
 def test_flowmap_with_custom_rules_match(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows, rules=[match_identical_names])
-    flowmap.match()
     actual = flowmap.to_randonneur()
     expected = [
         {
@@ -66,7 +63,6 @@ def test_flowmap_with_custom_rules_match(source_flows, target_flows):
 
 def test_flowmap_to_glad(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
-    flowmap.match()
     actual = flowmap.to_glad()
     expected = {
         "SourceFlowName": ["1,4-Butanediol"],
@@ -86,8 +82,7 @@ def test_flowmap_to_glad(source_flows, target_flows):
 
 def test_flowmap_export_matched(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
-    flowmap.match()
-    actual = flowmap.matched_source
+    actual = [flow.raw for flow in flowmap.matched_source]
     expected = [
         {
             "name": "1,4-Butanediol",
@@ -101,8 +96,7 @@ def test_flowmap_export_matched(source_flows, target_flows):
 
 def test_flowmap_export_unmatched(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
-    flowmap.match()
-    actual = flowmap.unmatched_source
+    actual = [flow.raw for flow in flowmap.unmatched_source]
     expected = [
         {
             "name": "1,4-Butanediol",

@@ -4,25 +4,19 @@ from .match import match_rules, format_match_result
 from tqdm import tqdm
 from typing import Callable
 import pandas as pd
+from collections import Counter
 
 class Flowmap:
-    def __init__(self, source_flows: list[Flow], target_flows: list[Flow], rules: list[Callable[..., bool]] = None):
+    def __init__(self, source_flows: list[Flow], target_flows: list[Flow], rules: list[Callable[..., bool]] = None, disable_progress: bool = False):
+        self.disable_progress = disable_progress
         self.source_flows = source_flows
-        self.source_flows_dict = {flow.id:flow for flow in source_flows}
-        self.source_flows_count = len(source_flows)
-        self.source_flows_unique_count = len(self.source_flows)
         self.target_flows = target_flows
-        self.target_flows_dict = {flow.id:flow for flow in target_flows}
-        self.target_flows_count = len(target_flows)
-        self.target_flows_unique_count = len(self.target_flows)
-        self.mappings_count = 0
-        self.mapped_source_flows = 0
-        self.mappings: list = []
         self.rules = rules if rules else match_rules()
     
-    def match(self):
+    @cached_property
+    def mappings(self):
         result = []
-        for s in tqdm(self.source_flows):
+        for s in tqdm(self.source_flows, disable=self.disable_progress):
             for t in self.target_flows:
                 for rule in self.rules:
                     is_match = rule(s, t)
@@ -33,15 +27,90 @@ class Flowmap:
                              'info': is_match}
                         )
                         break
-        self.mappings = result
-        self.mappings_count = len(result)
-        self.mapped_source_flows = len({link['from'].id for link in result})
-        self.statistics()
-    
+        return result
+
+    @cached_property
+    def matched_source_flows_ids(self):
+        return {map_entry['from'].id for map_entry in self.mappings}
+
+    @cached_property
+    def matched_target_flows_ids(self):
+        return {map_entry['to'].id for map_entry in self.mappings}
+
+    @cached_property
+    def matched_source(self):
+        result = [
+            flow
+            for flow in self.source_flows 
+            if flow.id in self.matched_source_flows_ids
+        ]
+        return result
+
+    @cached_property
+    def unmatched_source(self):
+        result = [
+            flow 
+            for flow in self.source_flows 
+            if flow.id not in self.matched_source_flows_ids
+        ]
+        return result
+
+    @cached_property
+    def matched_source_statistics(self):
+        matched = Counter([flow.context.full for flow in self.matched_source])
+        matched = pd.Series(matched).reset_index()
+        matched.columns = ['context', 'matched']
+
+        total = Counter([flow.context.full for flow in self.source_flows])
+        total = pd.Series(total).reset_index()
+        total.columns = ['context', 'total']
+
+        df = pd.merge(matched, total, on='context', how='outer')
+        df = df.fillna(0).astype({'matched': 'int', 'total': 'int'})
+
+        df['percent'] = df.matched / df.total
+        result = df.sort_values('percent')
+        return result
+
+    @cached_property
+    def matched_target(self):
+        result = [
+            flow
+            for flow in self.target_flows 
+            if flow.id in self.matched_target_flows_ids
+        ]
+        return result
+
+    @cached_property
+    def unmatched_target(self):
+        result = [
+            flow.raw 
+            for flow in self.target_flows 
+            if flow.id not in self.matched_target_flows_ids
+        ]
+        return result
+
+    @cached_property
+    def matched_target_statistics(self):
+        matched = Counter([flow.context.full for flow in self.matched_target])
+        matched = pd.Series(matched).reset_index()
+        matched.columns = ['context', 'matched']
+
+        total = Counter([flow.context.full for flow in self.target_flows])
+        total = pd.Series(total).reset_index()
+        total.columns = ['context', 'total']
+
+        df = pd.merge(matched, total, on='context', how='outer')
+        df = df.fillna(0).astype({'matched': 'int', 'total': 'int'})
+
+        df['percent'] = df.matched / df.total
+        result = df.sort_values('percent')
+        return result
+
     def statistics(self):
-        print(f'{self.source_flows_unique_count} unique source flows...')
-        print(f'{self.target_flows_unique_count} unique target flows...')
-        print(f'{self.mappings_count} mappings of {self.mapped_source_flows} unique source flows ({self.mapped_source_flows / self.source_flows_unique_count:.2%} of total).')
+        print(f'{len(self.source_flows)} source flows...')
+        print(f'{len(self.target_flows)} target flows...')
+        print(f'{len(self.mappings)} mappings ({len(self.matched_source) / len(self.source_flows):.2%} of total).')
 
     def to_randonneur(self):
         result = [
@@ -71,43 +140,3 @@ class Flowmap:
             data.append(row)
 
         return pd.DataFrame(data)        
-
-    @cached_property
-    def matched_source(self):
-        mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
-        result = [
-            flow.raw 
-            for flow in self.source_flows 
-            if flow.id in mapped_flows
-        ]
-        return result
-
-    @cached_property
-    def unmatched_source(self):
-        mapped_flows = {map_entry['from'].id for map_entry in self.mappings}
-        result = [
-            flow.raw 
-            for flow in self.source_flows 
-            if flow.id not in mapped_flows
-        ]
-        return result
-
-    @cached_property
-    def matched_target(self):
-        mapped_flows = {map_entry['to'].id for map_entry in self.mappings}
-        result = [
-            flow.raw 
-            for flow in self.target_flows 
-            if flow.id in mapped_flows
-        ]
-        return result
-
-    @cached_property
-    def unmatched_target(self):
-        mapped_flows = {map_entry['to'].id for map_entry in self.mappings}
-        result = [
-            flow.raw 
-            for flow in self.target_flows 
-            if flow.id not in mapped_flows
-        ]
-        return result

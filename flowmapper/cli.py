@@ -61,25 +61,24 @@ def map(
     target_flows = [Flow.from_dict(flow, field_mapping['target']) for flow in read_flowlist(target)]
 
     flowmap = Flowmap(source_flows, target_flows)
-    flowmap.match()
 
     stem = f'{source.stem}-{target.stem}'
 
     if matched_source:
         with open(output_dir / f'{source.stem}-matched.json', 'w') as fs:
-            json.dump(flowmap.matched_source, fs, indent=True)
+            json.dump([flow.raw for flow in flowmap.matched_source], fs, indent=True)
 
     if unmatched_source:
         with open(output_dir / f'{source.stem}-unmatched.json', 'w') as fs:
-            json.dump(flowmap.unmatched_source, fs, indent=True)
+            json.dump([flow.raw for flow in flowmap.unmatched_source], fs, indent=True)
 
     if matched_target:
         with open(output_dir / f'{target.stem}-matched.json', 'w') as fs:
-            json.dump(flowmap.matched_target, fs, indent=True)
+            json.dump([flow.raw for flow in flowmap.matched_target], fs, indent=True)
 
     if unmatched_target:
         with open(output_dir / f'{target.stem}-unmatched.json', 'w') as fs:
-            json.dump(flowmap.unmatched_target, fs, indent=True)
+            json.dump([flow.raw for flow in flowmap.unmatched_target], fs, indent=True)
 
     if format.value == 'randonneur':
         with open(output_dir / f'{stem}.json', 'w') as fs:

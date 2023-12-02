@@ -84,7 +84,7 @@ class Flowmap:
     @cached_property
     def unmatched_target(self):
         result = [
-            flow.raw 
+            flow
             for flow in self.target_flows 
             if flow.id not in self.matched_target_flows_ids
         ]

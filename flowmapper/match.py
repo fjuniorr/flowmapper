@@ -16,7 +16,8 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
     source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
     source_result = {
                 s.fields['name']: s.name,
-                source_context_key: s.raw[source_context_key]
+                source_context_key: s.raw[source_context_key],
+                s.fields['unit']: s.unit
             }
     if s.uuid:
         source_result.update({s.fields['uuid']: s.uuid})

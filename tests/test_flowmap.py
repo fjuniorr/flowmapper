@@ -14,6 +14,7 @@ def test_flowmap_to_randonneur(source_flows, target_flows):
             "source": {
                 "name": "1,4-Butanediol",
                 "categories": ["Air", "(unspecified)"],
+                "unit": "kg"
             },
             "target": {
                 "uuid": "09db39be-d9a6-4fc3-8d25-1f80b23e9131",
@@ -47,6 +48,7 @@ def test_flowmap_with_custom_rules_match(source_flows, target_flows):
             "source": {
                 "name": "1,4-Butanediol",
                 "categories": ["Air", "(unspecified)"],
+                "unit": "kg"
             },
             "target": {
                 "uuid": "09db39be-d9a6-4fc3-8d25-1f80b23e9131",

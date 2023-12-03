@@ -1,6 +1,6 @@
 from functools import cached_property
 from .flow import Flow
-from .match import match_rules, format_match_result
+from .match import match_rules, format_match_result, get_conversion_factor
 from tqdm import tqdm
 from typing import Callable
 import pandas as pd
@@ -24,6 +24,7 @@ class Flowmap:
                         result.append(
                             {'from': s,
                              'to': t,
+                             'conversion_factor': get_conversion_factor(s, t),
                              'info': is_match}
                         )
                         break
@@ -116,6 +117,7 @@ class Flowmap:
         result = [
             format_match_result(map_entry['from'], 
                                 map_entry['to'],
+                                map_entry['conversion_factor'],
                                 map_entry['info']) 
             for map_entry in self.mappings
         ]
@@ -130,7 +132,7 @@ class Flowmap:
                     'SourceFlowContext': map_entry['from'].context.full,
                     'SourceUnit': map_entry['from'].unit,
                     'MatchCondition': '',
-                    'ConversionFactor': map_entry['info'].get('conversion_factor'),
+                    'ConversionFactor': map_entry['conversion_factor'],
                     'TargetFlowName': map_entry['to'].name,
                     'TargetFlowUUID': map_entry['to'].uuid,
                     'TargetFlowContext': map_entry['to'].context.full,

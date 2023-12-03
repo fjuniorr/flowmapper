@@ -185,20 +185,8 @@ MISSING_FOSSIL_AND_BIOGENIC_CARBON_MAPPING = {
 }
 
 NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING = {
-        'Ammonia, as N': {
-            'name': 'Ammonia',
-            'multiplier': 17 / 14,
-        },
-        'Gas, mine, off-gas, process, coal mining/kg': {
-            'name': 'Gas, mine, off-gas, process, coal mining',
-            'mutiplier': 1, #TBD
-        },
-        'AOX (Adsorbable Organic Halogens)': {
-            'name': 'AOX, Adsorbable Organic Halogen as Cl',
-            'mutiplier': 1, #TBD
-        },
-        'AOX, Adsorbable Organic Halogen': {
-            'name': 'AOX, Adsorbable Organic Halogen as Cl',
-            'mutiplier': 1, #TBD
-        },
+        'Ammonia, as N': 'Ammonia',
+        'Gas, mine, off-gas, process, coal mining/kg': 'Gas, mine, off-gas, process, coal mining',
+        'AOX (Adsorbable Organic Halogens)': 'AOX, Adsorbable Organic Halogen as Cl',
+        'AOX, Adsorbable Organic Halogen': 'AOX, Adsorbable Organic Halogen as Cl',
     }

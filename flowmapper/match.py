@@ -44,6 +44,18 @@ def get_conversion_factor(s:Flow, t: Flow):
         result = 17 / 14
     elif s.unit == t.unit:
         result = 1.0
+    elif s.unit == 'm2a' and t.unit == 'm2*year':
+        result = 1.0
+    elif s.unit == 'm3y' and t.unit == 'm3*year':
+        result = 1.0
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'ton' and t.unit == 'm3':
+        result = 1.0
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'g' and t.unit == 'm3':
+        result = 1e-6
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'kg' and t.unit == 'm3':
+        result = 1e-3
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'l' and t.unit == 'm3':
+        result = 1e-3
     elif s.unit == 'Bq' and t.unit == 'kBq':
         result = 1e-3
     elif s.unit == 'ton' and t.unit == 'kg':

@@ -2,6 +2,7 @@ from flowmapper.match import get_conversion_factor
 from flowmapper.flow import Flow
 import math
 
+
 def test_get_conversion_factor(field_mapping):
     s = Flow.from_dict(
         {
@@ -58,7 +59,8 @@ def test_get_conversion_factor_water(field_mapping):
     )
 
     actual = get_conversion_factor(s, t)
-    assert math.isnan(actual)
+    expected = 1e-3
+    assert actual == expected
 
 
 def test_get_conversion_factor_m3y(field_mapping):
@@ -87,7 +89,8 @@ def test_get_conversion_factor_m3y(field_mapping):
     )
 
     actual = get_conversion_factor(s, t)
-    assert math.isnan(actual)
+    expected = 1
+    assert actual == expected
 
 
 def test_get_conversion_factor_m2a(field_mapping):
@@ -110,6 +113,37 @@ def test_get_conversion_factor_m2a(field_mapping):
                 "@subcompartmentId": "7d704b6f-d455-4f41-9c28-50b4f372f315",
                 "compartment": {"@xml:lang": "en", "#text": "natural resource"},
                 "subcompartment": {"@xml:lang": "en", "#text": "land"},
+            },
+        },
+        field_mapping["target"],
+    )
+
+    actual = get_conversion_factor(s, t)
+    expected = 1
+    assert actual == expected
+
+
+def test_get_conversion_factor_nan(field_mapping):
+    s = Flow.from_dict(
+        {
+            "name": "Radium-226/kg",
+            "unit": "kg",
+            "categories": ["Emissions to water", ""],
+        },
+        field_mapping["source"],
+    )
+
+    t = Flow.from_dict(
+        {
+            "@id": "74a0aabb-e11b-4f3b-8921-45e447b33393",
+            "@unitId": "4923348e-591b-4772-b224-d19df86f04c9",
+            "@casNumber": "013982-63-3",
+            "name": {"@xml:lang": "en", "#text": "Radium-226"},
+            "unitName": {"@xml:lang": "en", "#text": "kBq"},
+            "compartment": {
+                "@subcompartmentId": "65f8d2a1-63ed-479c-b86c-3bcf38e86320",
+                "compartment": {"@xml:lang": "en", "#text": "water"},
+                "subcompartment": {"@xml:lang": "en", "#text": "ocean"},
             },
         },
         field_mapping["target"],

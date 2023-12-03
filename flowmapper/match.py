@@ -58,7 +58,12 @@ def match_identical_names(s: Flow, t: Flow, comment = 'Identical names'):
         return {'comment': comment}
 
 def match_identical_names_except_missing_suffix(s: Flow, t: Flow, suffix, comment = 'Identical names except missing suffix'):
-    is_match = f"{s.name}, {suffix}" == t.name and s.context == t.context
+    is_match = (
+                (f"{s.name}, {suffix}" == t.name) or
+                (f"{t.name}, {suffix}" == s.name) or
+                (f"{s.name} {suffix}" == t.name) or
+                (f"{t.name} {suffix}" == s.name)
+    ) and s.context == t.context
     
     if is_match:
         return {'comment': comment}

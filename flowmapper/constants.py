@@ -1,5 +1,4 @@
 CONTEXT_MAPPING = {
-        'air/': 'air/unspecified',
         'Air/': 'air/unspecified',
         'Air/(unspecified)': 'air/unspecified',
         'Air/high. pop.': 'air/urban air close to ground',
@@ -12,7 +11,6 @@ CONTEXT_MAPPING = {
         'Emissions to air/low. pop.': 'air/non-urban air or from high stacks',
         'Emissions to air/low. pop., long-term': 'air/low population density, long-term',
         'Emissions to air/stratosphere + troposphere': 'air/lower stratosphere + upper troposphere',
-        'soil/': 'soil/unspecified',
         'Soil/': 'soil/unspecified',
         'Soil/(unspecified)': 'soil/unspecified',
         'Soil/agricultural': 'soil/agricultural',
@@ -21,8 +19,7 @@ CONTEXT_MAPPING = {
         'Emissions to soil/agricultural': 'soil/agricultural',
         'Emissions to soil/forestry': 'soil/forestry',
         'Emissions to soil/industrial': 'soil/industrial',
-        'water/': 'air/unspecified',
-        'Water/': 'air/unspecified',
+        'Water/': 'water/unspecified',
         'Water/(unspecified)': 'water/unspecified',
         'Water/groundwater, long-term': 'water/ground-, long-term',
         'Water/ocean': 'water/ocean',
@@ -43,6 +40,8 @@ CONTEXT_MAPPING = {
         'Raw/(unspecified)': 'natural resource/in ground',
         'Raw/in water': 'natural resource/in water',
     }
+CONTEXT_MAPPING.update({key.lower(): value for key, value in CONTEXT_MAPPING.items()})
+
 
 RANDOM_NAME_DIFFERENCES_MAPPING = {
     '2,4-D, dimethylamine salt': 'Dimethylamine',

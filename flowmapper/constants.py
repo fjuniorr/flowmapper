@@ -28,13 +28,13 @@ CONTEXT_MAPPING = {
         'Emissions to water/ocean': 'water/ocean',
         'Emissions to water/river': 'water/surface water',
         'Emissions to water/river, long-term': 'water/surface water',
-        'Resources/': None,
+        'Resources/': 'natural resource/in ground',
         'Resources/biotic': 'natural resource/biotic',
         'Resources/in air': 'natural resource/in air',
         'Resources/in ground': 'natural resource/in ground',
         'Resources/in water': 'natural resource/in water',
         'Resources/land': 'natural resource/land',
-        'Raw/(unspecified)': None,
+        'Raw/(unspecified)': 'natural resource/in ground',
         'Raw/in water': 'natural resource/in water',
     }
 

@@ -4,6 +4,25 @@ import pytest
 from flowmapper.utils import read_field_mapping, read_flowlist
 from flowmapper.flow import Flow
 
+@pytest.fixture
+def field_mapping():
+    result = {
+        "source": {
+            "name": "name",
+            "context": ["categories.0", "categories.1"],
+            "unit": "unit",
+        },
+        "target": {
+            "uuid": "@id",
+            "context": [
+                "compartment.compartment.#text",
+                "compartment.subcompartment.#text",
+            ],
+            "name": "name.#text",
+            "unit": "unitName.#text",
+        }
+    }
+    return result
 
 @pytest.fixture
 def fields():

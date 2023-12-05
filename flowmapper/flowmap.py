@@ -123,12 +123,13 @@ class Flowmap:
         ]
         return result
 
-    def to_glad(self):
+    def to_glad(self, ensure_id: bool = False):
         data = []
         for map_entry in self.mappings:
+            source_flow_id = map_entry['from'].uuid if map_entry['from'].uuid or not ensure_id else map_entry['from'].id
             row = {
                     'SourceFlowName': map_entry['from'].name,
-                    'SourceFlowUUID': map_entry['from'].uuid,
+                    'SourceFlowUUID': source_flow_id,
                     'SourceFlowContext': map_entry['from'].context.full,
                     'SourceUnit': map_entry['from'].unit,
                     'MatchCondition': '',

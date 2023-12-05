@@ -70,7 +70,7 @@ def get_conversion_factor(s:Flow, t: Flow):
     return result
 
 def match_identical_names_in_synonyms(s: Flow, t: Flow, comment: str = 'Identical synonyms'):
-    is_match = s.name in t.synonyms and s.context == t.context
+    is_match = True if t.synonyms and s.name in t.synonyms and s.context == t.context else False
     if is_match:
         return {'comment': comment}
 

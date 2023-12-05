@@ -19,6 +19,7 @@ def field_mapping():
                 "compartment.subcompartment.#text",
             ],
             "name": "name.#text",
+            "synonyms": ("synonym", ["#text"]),
             "unit": "unitName.#text",
         }
     }

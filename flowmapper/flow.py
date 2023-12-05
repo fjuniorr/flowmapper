@@ -11,11 +11,13 @@ class Flow:
     id: str = None
     uuid: str = None
     name: str = None
+    synonyms: list[str] = None
     context: str = None
     unit: str = None
     cas: CAS = None
     fields: dict = field(default_factory=lambda: {"uuid": "uuid", 
                                                   "name": "name", 
+                                                  "synonyms": "synonyms",
                                                   "context": "context", 
                                                   "unit": "unit", 
                                                   "cas":"cas"})
@@ -27,6 +29,7 @@ class Flow:
             id = generate_flow_id(d),
             uuid = jp.extract(fields['uuid'], d) if fields.get('uuid') else None,
             name = jp.extract(fields['name'], d) if fields.get('name') else None,
+            synonyms = jp.extract(fields['synonyms'], d) if fields.get('synonyms') else None,
             context = Context.from_dict(d, fields['context']) if fields.get('context') else None,
             unit = jp.extract(fields['unit'], d) if fields.get('unit') else None,
             cas = CAS(jp.extract(fields['cas'], d)) if fields.get('cas') else CAS(''),

@@ -5,6 +5,7 @@ def test_read_field_mapping():
         "source": {
             "uuid": "",
             "name": "name",
+            "synonyms": "",
             "context": ["categories.0", "categories.1"],
             "unit": "unit",
             "cas": "CAS",
@@ -12,6 +13,7 @@ def test_read_field_mapping():
         "target": {
             "uuid": "@id",
             "name": "name.#text",
+            "synonyms": ('synonym', ['#text']),
             "context": ["compartment.compartment.#text", "compartment.subcompartment.#text"],
             "unit": "unitName.#text",
             "cas": "@casNumber",

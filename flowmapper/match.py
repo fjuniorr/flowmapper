@@ -69,6 +69,11 @@ def get_conversion_factor(s:Flow, t: Flow):
 
     return result
 
+def match_identical_names_in_synonyms(s: Flow, t: Flow, comment: str = 'Identical synonyms'):
+    is_match = s.name in t.synonyms and s.context == t.context
+    if is_match:
+        return {'comment': comment}
+
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    
     is_match = s.cas == t.cas and s.context == t.context
     if is_match:
@@ -143,6 +148,7 @@ def match_mapped_name_differences_with_unit_conversion(s: Flow, t: Flow):
 def match_rules(): 
     return [
             match_identical_names,
+            match_identical_names_in_synonyms,
             match_resources_with_suffix_in_ground,
             match_minor_random_name_differences,
             match_emissions_with_suffix_ion,

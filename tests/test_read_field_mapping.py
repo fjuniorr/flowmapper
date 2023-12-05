@@ -17,6 +17,6 @@ def test_read_field_mapping():
             "cas": "@casNumber",
         },
     }
-    actual = read_field_mapping("tests/data/field_mapping.toml")
+    actual = read_field_mapping("tests/data/field_mapping.py")
     assert expected == actual
 

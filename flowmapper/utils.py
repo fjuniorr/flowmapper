@@ -7,11 +7,21 @@ try:
     import tomllib
 except ModuleNotFoundError:
     import tomli as tomllib
+import importlib.util
+
+def import_module(filepath):
+    filepath = Path(filepath)
+    module_name = filepath.stem
+    spec = importlib.util.spec_from_file_location(module_name, filepath)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 def read_field_mapping(filepath: Path):
-    with open(filepath, 'rb') as file:
-        data = tomllib.load(file)
-    fields = data['fields']
+    module = import_module(filepath)
+    fields = getattr(module, 'config', None)
+    if not fields:
+        raise Exception(f'{filepath} does not define a dict named config with field mapping information.')
 
     result = {
         'source': {},

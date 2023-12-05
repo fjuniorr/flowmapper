@@ -19,8 +19,34 @@ def test_match_identical_names_except_missing_suffix(fields):
         "FlowUUID": "c3b659e5-35f1-408c-8cb5-b5f9b295c76e",
     }
 
-    s = Flow.from_dict(source, fields['source'])
-    t = Flow.from_dict(target, fields['target'])
-    
-    match = match_identical_names_except_missing_suffix(s, t, suffix='ion')
+    s = Flow.from_dict(source, fields["source"])
+    t = Flow.from_dict(target, fields["target"])
+
+    match = match_identical_names_except_missing_suffix(s, t, suffix="ion")
+    assert match
+
+
+def test_match_identical_names_except_missing_suffix_different_order(field_mapping):
+    s = Flow.from_dict(
+        {"name": "Iron, ion", "unit": "g", "categories": ["Emissions to air", ""]},
+        field_mapping["source"],
+    )
+
+    t = Flow.from_dict(
+        {
+            "@id": "8dba66e2-0f2e-4038-84ef-1e40b4f573a6",
+            "@unitId": "487df68b-4994-4027-8fdc-a4dc298257b7",
+            "@casNumber": "007439-89-6",
+            "name": {"@xml:lang": "en", "#text": "Iron"},
+            "unitName": {"@xml:lang": "en", "#text": "kg"},
+            "compartment": {
+                "@subcompartmentId": "7011f0aa-f5f9-4901-8c10-884ad8296812",
+                "compartment": {"@xml:lang": "en", "#text": "air"},
+                "subcompartment": {"@xml:lang": "en", "#text": "unspecified"},
+            },
+        },
+        field_mapping["target"],
+    )
+
+    match = match_identical_names_except_missing_suffix(s, t, suffix="ion")
     assert match

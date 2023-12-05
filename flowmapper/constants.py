@@ -1,4 +1,5 @@
 CONTEXT_MAPPING = {
+        'Air/': 'air/unspecified',
         'Air/(unspecified)': 'air/unspecified',
         'Air/high. pop.': 'air/urban air close to ground',
         'Air/indoor': 'air/indoor',
@@ -10,6 +11,7 @@ CONTEXT_MAPPING = {
         'Emissions to air/low. pop.': 'air/non-urban air or from high stacks',
         'Emissions to air/low. pop., long-term': 'air/low population density, long-term',
         'Emissions to air/stratosphere + troposphere': 'air/lower stratosphere + upper troposphere',
+        'Soil/': 'soil/unspecified',
         'Soil/(unspecified)': 'soil/unspecified',
         'Soil/agricultural': 'soil/agricultural',
         'Soil/industrial': 'soil/industrial',
@@ -17,6 +19,7 @@ CONTEXT_MAPPING = {
         'Emissions to soil/agricultural': 'soil/agricultural',
         'Emissions to soil/forestry': 'soil/forestry',
         'Emissions to soil/industrial': 'soil/industrial',
+        'Water/': 'water/unspecified',
         'Water/(unspecified)': 'water/unspecified',
         'Water/groundwater, long-term': 'water/ground-, long-term',
         'Water/ocean': 'water/ocean',
@@ -37,6 +40,8 @@ CONTEXT_MAPPING = {
         'Raw/(unspecified)': 'natural resource/in ground',
         'Raw/in water': 'natural resource/in water',
     }
+CONTEXT_MAPPING.update({key.lower(): value for key, value in CONTEXT_MAPPING.items()})
+
 
 RANDOM_NAME_DIFFERENCES_MAPPING = {
     '2,4-D, dimethylamine salt': 'Dimethylamine',
@@ -185,20 +190,8 @@ MISSING_FOSSIL_AND_BIOGENIC_CARBON_MAPPING = {
 }
 
 NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING = {
-        'Ammonia, as N': {
-            'name': 'Ammonia',
-            'multiplier': 17 / 14,
-        },
-        'Gas, mine, off-gas, process, coal mining/kg': {
-            'name': 'Gas, mine, off-gas, process, coal mining',
-            'mutiplier': 1, #TBD
-        },
-        'AOX (Adsorbable Organic Halogens)': {
-            'name': 'AOX, Adsorbable Organic Halogen as Cl',
-            'mutiplier': 1, #TBD
-        },
-        'AOX, Adsorbable Organic Halogen': {
-            'name': 'AOX, Adsorbable Organic Halogen as Cl',
-            'mutiplier': 1, #TBD
-        },
+        'Ammonia, as N': 'Ammonia',
+        'Gas, mine, off-gas, process, coal mining/kg': 'Gas, mine, off-gas, process, coal mining',
+        'AOX (Adsorbable Organic Halogens)': 'AOX, Adsorbable Organic Halogen as Cl',
+        'AOX, Adsorbable Organic Halogen': 'AOX, Adsorbable Organic Halogen as Cl',
     }

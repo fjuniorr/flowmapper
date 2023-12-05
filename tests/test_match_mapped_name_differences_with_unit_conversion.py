@@ -30,7 +30,7 @@ def test_match_non_ionic_state():
                 "context": "air",
                 "unit": "kg",
             },
-            "conversion_factor": 1,
+            "conversion_factor": 1.0,
             "comment": "Mapped name differences with unit conversions",
         },
     ]

@@ -12,7 +12,7 @@ from .utils import rm_parentheses_roman_numerals, extract_country_code, rm_roman
 
 logger = logging.getLogger(__name__)
 
-def format_match_result(s: Flow, t: Flow, match_info: dict):
+def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: dict):
     source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
     source_result = {
                 s.fields['name']: s.name,
@@ -31,19 +31,42 @@ def format_match_result(s: Flow, t: Flow, match_info: dict):
     if match_info.get('location'):
         target_result.update({'location': match_info['location']})
 
-    if match_info.get('multiplier'):
-        conversion_factor = match_info.get('multiplier')
-    elif s.unit == t.unit:
-        conversion_factor = 1
-    else:
-        conversion_factor = '?'
-
     result = {
             'source': source_result,
             'target': target_result,
             'conversion_factor': conversion_factor,
             'comment': match_info['comment']
         }
+    return result
+
+def get_conversion_factor(s:Flow, t: Flow):
+    if s.name == 'Ammonia, as N' and t.name == 'Ammonia':
+        result = 17 / 14
+    elif s.unit == t.unit:
+        result = 1.0
+    elif s.unit == 'm2a' and t.unit == 'm2*year':
+        result = 1.0
+    elif s.unit == 'm3y' and t.unit == 'm3*year':
+        result = 1.0
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'ton' and t.unit == 'm3':
+        result = 1.0
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'g' and t.unit == 'm3':
+        result = 1e-6
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'kg' and t.unit == 'm3':
+        result = 1e-3
+    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'l' and t.unit == 'm3':
+        result = 1e-3
+    elif s.unit == 'Bq' and t.unit == 'kBq':
+        result = 1e-3
+    elif s.unit == 'ton' and t.unit == 'kg':
+        result = 1e-3
+    elif s.unit == 'g' and t.unit == 'kg':
+        result = 1e3
+    elif s.unit == 'mg' and t.unit == 'kg':
+        result = 1e-6
+    else:
+        result = float('nan')
+
     return result
 
 def match_identical_cas_numbers(s: Flow, t: Flow, comment: str = 'Identical CAS numbers'):    
@@ -73,13 +96,6 @@ def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped n
     
     if is_match:
         return {'comment': comment}
-
-def match_mapped_name_differences_with_unit_conversion(s: Flow, t: Flow, comment = 'Mapped name differences with unit conversions'):
-    s_name = NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING.get(s.name)
-    if s_name:
-        is_match = s_name.get('name') == t.name and s.context == t.context
-        if is_match:
-            return {'comment': comment, 'multiplier': NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING[s.name].get('multiplier')}
 
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
     is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
@@ -120,6 +136,9 @@ def match_minor_land_name_differences(s: Flow, t: Flow):
 
 def match_missing_fossil_and_biogenic_carbon(s: Flow, t: Flow):
     return match_mapped_name_differences(s, t, mapping = MISSING_FOSSIL_AND_BIOGENIC_CARBON_MAPPING, comment = 'Missing biogenic and fossil carbon')
+
+def match_mapped_name_differences_with_unit_conversion(s: Flow, t: Flow):
+    return match_mapped_name_differences(s, t, mapping = NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING, comment = 'Mapped name differences with unit conversions')
 
 def match_rules(): 
     return [

@@ -6,6 +6,12 @@ from flowmapper.match import (
     match_identical_names,
 )
 
+def test_flowmap_mappings(source_flows, target_flows):
+    flowmap = Flowmap(source_flows, target_flows)
+    actual = flowmap.mappings[0]
+    assert list(actual.keys()) == ['from', 'to', 'conversion_factor', 'match_rule', 'info']
+    assert actual['match_rule'] == 'match_identical_names'
+
 def test_flowmap_to_randonneur(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
     actual = flowmap.to_randonneur()

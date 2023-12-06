@@ -25,6 +25,7 @@ class Flowmap:
                             {'from': s,
                              'to': t,
                              'conversion_factor': get_conversion_factor(s, t),
+                             'match_rule': rule.__name__,
                              'info': is_match}
                         )
                         break

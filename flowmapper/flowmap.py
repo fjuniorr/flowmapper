@@ -1,6 +1,7 @@
 from functools import cached_property
 from .flow import Flow
-from .match import match_rules, format_match_result, get_conversion_factor
+from .match import match_rules, format_match_result
+from .unit import Unit
 from tqdm import tqdm
 from typing import Callable
 import pandas as pd
@@ -24,7 +25,7 @@ class Flowmap:
                         result.append(
                             {'from': s,
                              'to': t,
-                             'conversion_factor': get_conversion_factor(s, t),
+                             'conversion_factor': s.unit.conversion_factor(t.unit),
                              'match_rule': rule.__name__,
                              'info': is_match}
                         )
@@ -132,13 +133,13 @@ class Flowmap:
                     'SourceFlowName': map_entry['from'].name,
                     'SourceFlowUUID': source_flow_id,
                     'SourceFlowContext': map_entry['from'].context.full,
-                    'SourceUnit': map_entry['from'].unit,
+                    'SourceUnit': map_entry['from'].unit.raw_value,
                     'MatchCondition': '',
                     'ConversionFactor': map_entry['conversion_factor'],
                     'TargetFlowName': map_entry['to'].name,
                     'TargetFlowUUID': map_entry['to'].uuid,
                     'TargetFlowContext': map_entry['to'].context.full,
-                    'TargetUnit': map_entry['to'].unit,
+                    'TargetUnit': map_entry['to'].unit.raw_value,
                     'MemoMapper': map_entry['info'].get('comment')
                 }
             data.append(row)

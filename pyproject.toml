@@ -32,7 +32,8 @@ dependencies = [
     "glom",
     "tqdm",
     "pandas[excel]",
-    "typer"
+    "typer",
+    "bw2io"
 ]
 
 [project.urls]

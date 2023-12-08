@@ -13,11 +13,10 @@ from .utils import rm_parentheses_roman_numerals, extract_country_code, rm_roman
 logger = logging.getLogger(__name__)
 
 def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: dict):
-    source_context_key = s.fields['context'] if isinstance(s.fields['context'], str) else s.fields['context'][0].split('.')[0]
     source_result = {
                 s.fields['name']: s.name,
-                source_context_key: s.raw[source_context_key],
             }
+    source_result.update(s.context.raw_object)
     source_result.update(s.unit.raw_object)
     if s.uuid:
         source_result.update({s.fields['uuid']: s.uuid})
@@ -25,7 +24,7 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
     target_result = {
                 'uuid': t.uuid,
                 'name': t.name,
-                'context': t.context.full,
+                'context': t.context.raw_value,
                 'unit': t.unit.raw_value
             }
     if match_info.get('location'):

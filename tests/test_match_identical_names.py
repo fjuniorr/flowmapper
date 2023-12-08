@@ -28,7 +28,7 @@ def test_match_identical_names(fields):
     assert match
 
 
-def test_match_identical_names_jsonpath():
+def test_match_identical_names_jsonpath(field_mapping):
     source = {
         "name": "Carbon dioxide, in air",
         "categories": ["Raw", "(unspecified)"],
@@ -48,27 +48,8 @@ def test_match_identical_names_jsonpath():
         },
     }
 
-    fields = {
-        "source": {
-            "name": "name",
-            "context": ["categories.0", "categories.1"],
-            "unit": "unit",
-            "cas": "CAS",
-        },
-        "target": {
-            "uuid": "@id",
-            "name": "name.#text",
-            "context": [
-                "compartment.compartment.#text",
-                "compartment.subcompartment.#text",
-            ],
-            "unit": "unitName.#text",
-            "cas": "@casNumber",
-        },
-    }
-
-    s = Flow.from_dict(source, fields['source'])
-    t = Flow.from_dict(target, fields['target'])
+    s = Flow.from_dict(source, field_mapping['source'])
+    t = Flow.from_dict(target, field_mapping['target'])
     
     match = match_identical_names(s, t)
     assert not match

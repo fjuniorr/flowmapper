@@ -8,50 +8,69 @@ def test_context():
         "unit": "kg",
         "CAS": "000124-38-9",
     }
-    fields = ["categories.0", "categories.1"]
+    fields = "categories"
     actual = Context.from_dict(data, fields).to_dict()
     expected = {
-        "full": "Raw/(unspecified)",
-        "primary": "Raw",
-        "secondary": "(unspecified)",
+        "value": "natural resource/in ground",
+        "raw_value": "Raw/(unspecified)",
+        "raw_object": {"categories": ["Raw", "(unspecified)"]},
     }
     assert actual == expected
 
 
-def test_context_multiple_levels_list():
-    data = {
-        "name": "Carbon dioxide, in air",
-        "categories": ["emission/air", ["troposphere", "high"]],
-        "unit": "kg",
-        "CAS": "000124-38-9",
-    }
-    fields = ["categories.0", "categories.1"]
-    actual = Context.from_dict(data, fields).to_dict()
-    expected = {
-        "full": "emission/air/troposphere/high",
-        "primary": "emission/air",
-        "secondary": "troposphere/high",
-    }
+def test_trailing_slash():
+    c1 = Context.from_dict({"categories": ["Raw", "(unspecified)"]}, "categories")
+    c2 = Context.from_dict({"categories": ["Raw"]}, "categories")
+    c3 = Context.from_dict({"categories": ["Raw/"]}, "categories")
+    assert c1.value == c2.value
+    assert c2.value == c3.value
+    "/".join(c1.value)
+
+
+def test_unspecified():
+    c1 = Context.from_dict(
+        {
+            "compartment": {
+                "@subcompartmentId": "e47f0a6c-3be8-4027-9eee-de251784f708",
+                "compartment": {"@xml:lang": "en", "#text": "water"},
+                "subcompartment": {"@xml:lang": "en", "#text": "unspecified"},
+            },
+        },
+        "compartment.*.#text",
+    )
+
+    c2 = Context.from_dict({"categories": ["Emissions to water", ""]}, "categories")
+    c3 = Context.from_dict({"categories": ["Water", "(unspecified)"]}, "categories")
+    c4 = Context.from_dict({"categories": ["Water", ""]}, "categories")
+    c5 = Context.from_dict({"categories": ["Water/", ""]}, "categories")
+    c6 = Context.from_dict({"categories": ["Water/"]}, "categories")
+    c7 = Context.from_dict({"categories": "Water/(unspecified)"}, "categories")
+    c8 = Context.from_dict({"categories": "Water/unspecified"}, "categories")
+    c9 = Context.from_dict({"categories": "Water/"}, "categories")
+    c10 = Context.from_dict({"categories": "Water"}, "categories")
+    c11 = Context.from_dict(
+        {"context": [{"name": "Water"}, {"name": "unspecified"}]}, ("context", ["name"])
+    )
+    c12 = Context.from_dict({"categories": ["Water"]}, "categories")
+
+    actual = set(
+        [
+            c1.value,
+            c2.value,
+            c3.value,
+            c4.value,
+            c5.value,
+            c6.value,
+            c7.value,
+            c8.value,
+            c9.value,
+            c10.value,
+            c11.value,
+            c12.value,
+        ]
+    )
+    expected = {"water"}
     assert actual == expected
-
-
-def test_context_multiple_levels():
-    data = {
-        "name": "Carbon dioxide, in air",
-        "categories": "emission/air",
-        "subcategories": ["troposphere", "high"],
-        "unit": "kg",
-        "CAS": "000124-38-9",
-    }
-    fields = ["categories", "subcategories"]
-    actual = Context.from_dict(data, fields).to_dict()
-    expected = {
-        "full": "emission/air/troposphere/high",
-        "primary": "emission/air",
-        "secondary": "troposphere/high",
-    }
-    assert actual == expected
-
 
 def test_context_equality_true():
     s = {"name": "2-Propanol", "categories": ["Air", "low. pop."]}
@@ -74,4 +93,3 @@ def test_context_equality_true():
     )
 
     assert sc == tc
-

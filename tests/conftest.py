@@ -9,15 +9,12 @@ def field_mapping():
     result = {
         "source": {
             "name": "name",
-            "context": ["categories.0", "categories.1"],
+            "context": "categories",
             "unit": "unit",
         },
         "target": {
             "uuid": "@id",
-            "context": [
-                "compartment.compartment.#text",
-                "compartment.subcompartment.#text",
-            ],
+            "context": "compartment.*.#text",
             "name": "name.#text",
             "synonyms": ("synonym", ["#text"]),
             "unit": "unitName.#text",

@@ -23,19 +23,14 @@ def test_flow_with_jsonpath_expr():
 
     fields = {
         "cas": "@casNumber",
-        "context": [
-            "compartment.compartment.#text",
-            "compartment.subcompartment.#text",
-        ],
+        "context": "compartment.*.#text",
         "name": "name.#text",
         "unit": "unitName.#text",
         "uuid": "@id",
     }
 
     flow = Flow.from_dict(data, fields)
-    assert flow.context.full == "air/unspecified"
-    assert flow.context.primary == "air"
-    assert flow.context.secondary == "unspecified"
+    assert flow.context.value == "air"
     assert flow.unit.value == "kilogram"
     assert flow.unit.raw_value == "kg"
     assert flow.unit.raw_object == {'unitName': {'@xml:lang': 'en', '#text': 'kg'}}
@@ -51,7 +46,7 @@ def test_flow_from_sp_categories():
 
     fields = {
         "name": "name",
-        "context": ["categories.0", "categories.1"],
+        "context": "categories",
         "unit": "unit",
         "cas": "CAS",
     }
@@ -59,9 +54,7 @@ def test_flow_from_sp_categories():
     flow = Flow.from_dict(data, fields)
     assert flow.uuid is None
     assert flow.name == "Carbon dioxide, in air"
-    assert flow.context.full == "Raw/(unspecified)"
-    assert flow.context.primary == "Raw"
-    assert flow.context.secondary == "(unspecified)"
+    assert flow.context.raw_value == "Raw/(unspecified)"
     assert id(flow.raw) == id(data)
 
 
@@ -70,16 +63,14 @@ def test_flow_from_sp_missing():
 
     fields = {
         "name": "name",
-        "context": ["context.0", "context.1"],
+        "context": "context",
         "unit": "unit",
     }
 
     flow = Flow.from_dict(data, fields)
     assert flow.name == "Chrysotile"
     assert repr(flow.cas) == ""
-    assert flow.context.full == "Resources/in ground"
-    assert flow.context.primary == "Resources"
-    assert flow.context.secondary == "in ground"
+    assert flow.context.raw_value == "Resources/in ground"
 
 
 def test_flow_from_sp():

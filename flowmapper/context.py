@@ -1,37 +1,41 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from .constants import CONTEXT_MAPPING
 
 import flowmapper.jsonpath as jp
 
 @dataclass
 class Context:
-    full: str = None
-    primary: str = None
-    secondary: str = None
+    value: str
+    raw_value: str = ""
+    raw_object: dict = field(default_factory=lambda: {})
 
     @classmethod
-    def from_dict(cls, d, fields):
-        fields = [fields] if isinstance(fields, str) else fields
-        context_mapping_length = len(fields)
-        primary_context = jp.extract(fields[0], d)
-        if context_mapping_length == 1:
-            result = Context(primary_context, primary_context)
-        elif context_mapping_length == 2:
-            secondary_context = jp.extract(fields[1], d)
-            secondary_context = secondary_context if isinstance(secondary_context, str) else '/'.join(secondary_context)
-            result = Context(
-                full = f"{primary_context}/{secondary_context}",
-                primary = primary_context,
-                secondary = secondary_context
-            )
+    def from_dict(cls, d, spec):
+        key = jp.root(spec)
+        value = cls.ensure_list(jp.extract(spec, d))
+        result = Context(
+            value = cls.normalize_contexts(value),
+            raw_value = '/'.join(value),
+            raw_object = {key: d.get(key)},
+        )
         return result
 
     def to_dict(self):
         return asdict(self)
 
     def __eq__(self, other):
-        if CONTEXT_MAPPING.get(self.full, self.full) == CONTEXT_MAPPING.get(other.full, other.full):
-            result = True
-        else:
-            result = False
-        return result
+        return self.value == other.value
+
+    @staticmethod
+    def ensure_list(x):
+        return x.split('/') if isinstance(x, str) else x
+
+    @staticmethod
+    def normalize_contexts(context: list[str]):
+        result = '/'.join([
+            segment.lower().rstrip('/')
+            for segment in context 
+            if segment and segment.lower() not in {'(unspecified)', 'unspecified'}
+        ])
+        
+        return CONTEXT_MAPPING.get(result, result)

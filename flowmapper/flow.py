@@ -43,4 +43,4 @@ class Flow:
         return asdict(self)
 
     def __repr__(self) -> str:
-        return f'{self.name} <{self.context.full.lower()}>'
+        return f'{self.name} <{self.context.value}>'

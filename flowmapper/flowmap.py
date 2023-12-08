@@ -60,11 +60,11 @@ class Flowmap:
 
     @cached_property
     def matched_source_statistics(self):
-        matched = Counter([flow.context.full for flow in self.matched_source])
+        matched = Counter([flow.context.value for flow in self.matched_source])
         matched = pd.Series(matched).reset_index()
         matched.columns = ['context', 'matched']
 
-        total = Counter([flow.context.full for flow in self.source_flows])
+        total = Counter([flow.context.value for flow in self.source_flows])
         total = pd.Series(total).reset_index()
         total.columns = ['context', 'total']
 
@@ -95,11 +95,11 @@ class Flowmap:
 
     @cached_property
     def matched_target_statistics(self):
-        matched = Counter([flow.context.full for flow in self.matched_target])
+        matched = Counter([flow.context.value for flow in self.matched_target])
         matched = pd.Series(matched).reset_index()
         matched.columns = ['context', 'matched']
 
-        total = Counter([flow.context.full for flow in self.target_flows])
+        total = Counter([flow.context.value for flow in self.target_flows])
         total = pd.Series(total).reset_index()
         total.columns = ['context', 'total']
 
@@ -132,13 +132,13 @@ class Flowmap:
             row = {
                     'SourceFlowName': map_entry['from'].name,
                     'SourceFlowUUID': source_flow_id,
-                    'SourceFlowContext': map_entry['from'].context.full,
+                    'SourceFlowContext': map_entry['from'].context.raw_value,
                     'SourceUnit': map_entry['from'].unit.raw_value,
                     'MatchCondition': '',
                     'ConversionFactor': map_entry['conversion_factor'],
                     'TargetFlowName': map_entry['to'].name,
                     'TargetFlowUUID': map_entry['to'].uuid,
-                    'TargetFlowContext': map_entry['to'].context.full,
+                    'TargetFlowContext': map_entry['to'].context.raw_value,
                     'TargetUnit': map_entry['to'].unit.raw_value,
                     'MemoMapper': map_entry['info'].get('comment')
                 }

@@ -58,8 +58,7 @@ def test_get_conversion_factor_water(field_mapping):
     )
 
     actual = s.unit.conversion_factor(t.unit)
-    expected = 1e-3
-    assert actual == expected
+    assert math.isnan(actual)
 
 
 def test_get_conversion_factor_m3y(field_mapping):

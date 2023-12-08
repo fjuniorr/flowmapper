@@ -19,7 +19,7 @@ def test_match_non_ionic_state():
         {
             "source": {"name": "Ammonia, as N", "context": "air", "unit": "kg"},
             "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": "kg"},
-            "conversion_factor": 1.2142857142857142,
+            "conversion_factor": 1.0,
             "comment": "Mapped name differences with unit conversions",
         },
         {

@@ -17,8 +17,8 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
     source_result = {
                 s.fields['name']: s.name,
                 source_context_key: s.raw[source_context_key],
-                s.fields['unit']: s.unit
             }
+    source_result.update(s.unit.raw_object)
     if s.uuid:
         source_result.update({s.fields['uuid']: s.uuid})
     
@@ -26,7 +26,7 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
                 'uuid': t.uuid,
                 'name': t.name,
                 'context': t.context.full,
-                'unit': t.unit
+                'unit': t.unit.raw_value
             }
     if match_info.get('location'):
         target_result.update({'location': match_info['location']})
@@ -37,36 +37,6 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
             'conversion_factor': conversion_factor,
             'comment': match_info['comment']
         }
-    return result
-
-def get_conversion_factor(s:Flow, t: Flow):
-    if s.name == 'Ammonia, as N' and t.name == 'Ammonia':
-        result = 17 / 14
-    elif s.unit == t.unit:
-        result = 1.0
-    elif s.unit == 'm2a' and t.unit == 'm2*year':
-        result = 1.0
-    elif s.unit == 'm3y' and t.unit == 'm3*year':
-        result = 1.0
-    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'ton' and t.unit == 'm3':
-        result = 1.0
-    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'g' and t.unit == 'm3':
-        result = 1e-6
-    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'kg' and t.unit == 'm3':
-        result = 1e-3
-    elif s.name.startswith('Water') and t.name.startswith('Water') and s.unit == 'l' and t.unit == 'm3':
-        result = 1e-3
-    elif s.unit == 'Bq' and t.unit == 'kBq':
-        result = 1e-3
-    elif s.unit == 'ton' and t.unit == 'kg':
-        result = 1e-3
-    elif s.unit == 'g' and t.unit == 'kg':
-        result = 1e3
-    elif s.unit == 'mg' and t.unit == 'kg':
-        result = 1e-6
-    else:
-        result = float('nan')
-
     return result
 
 def match_identical_names_in_synonyms(s: Flow, t: Flow, comment: str = 'Identical synonyms'):

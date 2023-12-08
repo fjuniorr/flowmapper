@@ -36,6 +36,9 @@ def test_flow_with_jsonpath_expr():
     assert flow.context.full == "air/unspecified"
     assert flow.context.primary == "air"
     assert flow.context.secondary == "unspecified"
+    assert flow.unit.value == "kilogram"
+    assert flow.unit.raw_value == "kg"
+    assert flow.unit.raw_object == {'unitName': {'@xml:lang': 'en', '#text': 'kg'}}
 
 
 def test_flow_from_sp_categories():

@@ -1,4 +1,3 @@
-from flowmapper.match import get_conversion_factor
 from flowmapper.flow import Flow
 import math
 
@@ -31,7 +30,7 @@ def test_get_conversion_factor(field_mapping):
         field_mapping["target"],
     )
 
-    actual = get_conversion_factor(s, t)
+    actual = s.unit.conversion_factor(t.unit)
     expected = 1e-3
     assert actual == expected
 
@@ -58,7 +57,7 @@ def test_get_conversion_factor_water(field_mapping):
         field_mapping["target"],
     )
 
-    actual = get_conversion_factor(s, t)
+    actual = s.unit.conversion_factor(t.unit)
     expected = 1e-3
     assert actual == expected
 
@@ -88,7 +87,7 @@ def test_get_conversion_factor_m3y(field_mapping):
         field_mapping["target"],
     )
 
-    actual = get_conversion_factor(s, t)
+    actual = s.unit.conversion_factor(t.unit)
     expected = 1
     assert actual == expected
 
@@ -118,7 +117,7 @@ def test_get_conversion_factor_m2a(field_mapping):
         field_mapping["target"],
     )
 
-    actual = get_conversion_factor(s, t)
+    actual = s.unit.conversion_factor(t.unit)
     expected = 1
     assert actual == expected
 
@@ -149,5 +148,5 @@ def test_get_conversion_factor_nan(field_mapping):
         field_mapping["target"],
     )
 
-    actual = get_conversion_factor(s, t)
+    actual = s.unit.conversion_factor(t.unit)
     assert math.isnan(actual)

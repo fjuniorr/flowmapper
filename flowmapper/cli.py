@@ -61,6 +61,7 @@ def map(
     target_flows = [Flow.from_dict(flow, field_mapping['target']) for flow in read_flowlist(target)]
 
     flowmap = Flowmap(source_flows, target_flows)
+    flowmap.statistics()
 
     stem = f'{source.stem}-{target.stem}'
 

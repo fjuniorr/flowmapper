@@ -1,6 +1,6 @@
 from dataclasses import asdict, dataclass, field
-import unicodedata
 import flowmapper.jsonpath as jp
+from .utils import normalize_str
 
 @dataclass
 class FlowProperty:
@@ -56,15 +56,5 @@ class FlowProperty:
         elif isinstance(x, str):
             result = normalize_str(x)
         else:
-            result = [normalize_str(s) for s in x]
+            result = [normalize_str(s) for s in x if s]
         return result
-
-def normalize_str(s):
-    return unicodedata.normalize('NFC', s).strip().lower()
-
-
-class Name(FlowProperty):
-    pass
-
-class Synonyms(FlowProperty):
-    pass

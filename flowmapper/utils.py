@@ -3,6 +3,7 @@ from pathlib import Path
 import hashlib
 import re
 from typing import Optional
+import unicodedata
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -69,3 +70,6 @@ def extract_country_code(s: str) -> tuple[str, Optional[str]]:
         return (rest_of_string, country_code)
     else:
         return (s, None)
+
+def normalize_str(s):
+    return unicodedata.normalize('NFC', s).strip().lower()

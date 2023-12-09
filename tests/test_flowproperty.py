@@ -6,6 +6,10 @@ def test_empty():
     assert not p1
     assert p1 != p2
 
+def test_list_with_falsy_values():
+    p1 = FlowProperty(["", "FOO", None])
+    p1 == ["foo"]
+
 def test_get():
     d = {'foo': 1, "FOO": 2}
     p = FlowProperty("FOO")

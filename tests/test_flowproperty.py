@@ -37,6 +37,7 @@ def test_init():
     assert n.value == "\u00FCber"
     assert n.raw_value == "\u0055\u0308ber"
     assert n.raw_object == {"flowable": "\u0055\u0308ber"}
+    assert n.to_dict() == {'value': 'über', 'raw_value': 'Über', 'raw_object': {'flowable': 'Über'}}
 
 
 def test_init_synonyms():
@@ -46,3 +47,4 @@ def test_init_synonyms():
             {"@xml:lang": "en", "#text": "isopropylbenzene"},
         ]
     }, ("synonym", ["#text"]))
+

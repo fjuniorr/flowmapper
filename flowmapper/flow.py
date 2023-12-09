@@ -6,6 +6,7 @@ from .unit import Unit
 from .cas import CAS
 from .context import Context
 from .utils import generate_flow_id
+from .flowproperty import FlowProperty
 
 @dataclass
 class Flow:
@@ -29,8 +30,8 @@ class Flow:
         result = Flow(
             id = generate_flow_id(d),
             uuid = jp.extract(fields['uuid'], d) if fields.get('uuid') else None,
-            name = jp.extract(fields['name'], d) if fields.get('name') else None,
-            synonyms = jp.extract(fields['synonyms'], d) if fields.get('synonyms') else None,
+            name = FlowProperty.from_dict(d, fields.get('name')),
+            synonyms = FlowProperty.from_dict(d, fields.get('synonyms')),
             context = Context.from_dict(d, fields['context']) if fields.get('context') else None,
             unit = Unit.from_dict(d, fields['unit']),
             cas = CAS(jp.extract(fields['cas'], d)) if fields.get('cas') else CAS(''),

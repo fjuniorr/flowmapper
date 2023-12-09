@@ -3,6 +3,7 @@ from pathlib import Path
 import hashlib
 import re
 from typing import Optional
+import unicodedata
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -51,16 +52,16 @@ def read_flowlist(filepath: Path):
     return result
 
 def rm_parentheses_roman_numerals(s: str):
-    pattern = r'\(\s*([IVXLCDM]+)\s*\)'
+    pattern = r'\(\s*([ivxlcdm]+)\s*\)'
     return re.sub(pattern, r'\1', s)
 
 def rm_roman_numerals_ionic_state(s: str):
-    pattern = r'\s*\(\s*[IVXLCDM]+\s*\)'
+    pattern = r'\s*\(\s*[ivxlcdm]+\s*\)'
     return re.sub(pattern, '', s)
 
 def extract_country_code(s: str) -> tuple[str, Optional[str]]:
     # Regex to find a two-letter uppercase code following a comma and optional whitespace
-    match = re.search(r',\s*([A-Z]{2})$', s)
+    match = re.search(r',\s*([a-z]{2})$', s)
 
     if match:
         # Extract the country code and the preceding part of the string
@@ -69,3 +70,6 @@ def extract_country_code(s: str) -> tuple[str, Optional[str]]:
         return (rest_of_string, country_code)
     else:
         return (s, None)
+
+def normalize_str(s):
+    return unicodedata.normalize('NFC', s).strip().lower()

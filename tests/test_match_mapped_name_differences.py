@@ -24,5 +24,5 @@ def test_match_mapped_name_differences(fields):
     s = Flow.from_dict(source, fields['source'])
     t = Flow.from_dict(target, fields['target'])
 
-    match = match_mapped_name_differences(s, t, mapping={'Flurochloridone': 'Fluorochloridone'}, comment = "Minor random name differences")
+    match = match_mapped_name_differences(s, t, mapping={'flurochloridone': 'fluorochloridone'}, comment = "Minor random name differences")
     assert match

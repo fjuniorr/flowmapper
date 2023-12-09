@@ -14,16 +14,16 @@ logger = logging.getLogger(__name__)
 
 def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: dict):
     source_result = {
-                s.fields['name']: s.name,
-            }
-    source_result.update(s.context.raw_object)
-    source_result.update(s.unit.raw_object)
+                     **s.name.raw_object, 
+                     **s.context.raw_object,
+                     **s.unit.raw_object
+    }
     if s.uuid:
         source_result.update({s.fields['uuid']: s.uuid})
     
     target_result = {
                 'uuid': t.uuid,
-                'name': t.name,
+                'name': t.name.raw_value,
                 'context': t.context.raw_value,
                 'unit': t.unit.raw_value
             }
@@ -39,7 +39,7 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
     return result
 
 def match_identical_names_in_synonyms(s: Flow, t: Flow, comment: str = 'Identical synonyms'):
-    is_match = True if t.synonyms and s.name in t.synonyms and s.context == t.context else False
+    is_match = True if t.synonyms and s.name.value in t.synonyms.value and s.context == t.context else False
     if is_match:
         return {'comment': comment}
 
@@ -72,26 +72,26 @@ def match_mapped_name_differences(s: Flow, t: Flow, mapping, comment = 'Mapped n
         return {'comment': comment}
 
 def match_names_with_roman_numerals_in_parentheses(s: Flow, t: Flow, comment = 'With/without roman numerals in parentheses'):
-    is_match = rm_parentheses_roman_numerals(s.name) == rm_parentheses_roman_numerals(t.name) and s.context == t.context
+    is_match = rm_parentheses_roman_numerals(s.name.value) == rm_parentheses_roman_numerals(t.name.value) and s.context == t.context
     
     if is_match:
         return {'comment': comment}
 
 def match_names_with_country_codes(s: Flow, t: Flow, comment = 'Names with country code'):
-    s_name, s_location = extract_country_code(s.name)
+    s_name, s_location = extract_country_code(s.name.value)
     is_match = s_location and s_name == t.name and s.context == t.context
     
     if is_match:
-        return {'comment': comment, 'location': s_location}
+        return {'comment': comment, 'location': s_location.upper()}
 
 def match_non_ionic_state(s: Flow, t: Flow, comment = 'Non-ionic state if no better match'):
-    is_match = rm_roman_numerals_ionic_state(s.name) == t.name and s.context == t.context
+    is_match = rm_roman_numerals_ionic_state(s.name.value) == t.name and s.context == t.context
 
     if is_match:
         return {'comment': comment}
 
 def match_biogenic_to_non_fossil(s: Flow, t: Flow, comment = 'Biogenic to non-fossil if no better match'):
-    is_match = s.name.removesuffix(', biogenic') == t.name.removesuffix(', non-fossil') and s.context == t.context
+    is_match = s.name.value.removesuffix(', biogenic') == t.name.value.removesuffix(', non-fossil') and s.context == t.context
 
     if is_match:
         return {'comment': comment}

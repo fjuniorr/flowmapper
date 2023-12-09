@@ -30,6 +30,10 @@ def test_flow_with_jsonpath_expr():
     }
 
     flow = Flow.from_dict(data, fields)
+    assert flow.name.value == "ammonia"
+    assert flow.name.raw_value == "Ammonia"
+    assert flow.name.raw_object == {"name": {"@xml:lang": "en", "#text": "Ammonia"}}
+    assert not flow.synonyms
     assert flow.context.value == "air"
     assert flow.unit.value == "kilogram"
     assert flow.unit.raw_value == "kg"
@@ -53,7 +57,7 @@ def test_flow_from_sp_categories():
 
     flow = Flow.from_dict(data, fields)
     assert flow.uuid is None
-    assert flow.name == "Carbon dioxide, in air"
+    assert flow.name.raw_value == "Carbon dioxide, in air"
     assert flow.context.raw_value == "Raw/(unspecified)"
     assert id(flow.raw) == id(data)
 
@@ -68,7 +72,7 @@ def test_flow_from_sp_missing():
     }
 
     flow = Flow.from_dict(data, fields)
-    assert flow.name == "Chrysotile"
+    assert flow.name.raw_value == "Chrysotile"
     assert repr(flow.cas) == ""
     assert flow.context.raw_value == "Resources/in ground"
 
@@ -152,4 +156,4 @@ def test_flow_with_synonyms(field_mapping):
     }
 
     flow = Flow.from_dict(data, field_mapping["target"])
-    assert flow.synonyms == ["2-methylbuta-1,3-diene", "methyl bivinyl", "hemiterpene"]
+    assert flow.synonyms.raw_value == ["2-methylbuta-1,3-diene", "methyl bivinyl", "hemiterpene"]

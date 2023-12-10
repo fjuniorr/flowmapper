@@ -35,7 +35,7 @@ def test_flow_with_jsonpath_expr():
     assert flow.name.raw_object == {"name": {"@xml:lang": "en", "#text": "Ammonia"}}
     assert not flow.synonyms
     assert flow.context.value == "air"
-    assert flow.unit.value == "kilogram"
+    assert str(flow.unit.value.units) == "kilogram"
     assert flow.unit.raw_value == "kg"
     assert flow.unit.raw_object == {'unitName': {'@xml:lang': 'en', '#text': 'kg'}}
 

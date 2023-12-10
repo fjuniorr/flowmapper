@@ -78,7 +78,7 @@ def test_flowmap_to_glad(source_flows, target_flows):
         "SourceFlowContext": ["Air/(unspecified)"],
         "SourceUnit": ["kg"],
         "MatchCondition": [""],
-        "ConversionFactor": [1.0],
+        "ConversionFactor": [1],
         "TargetFlowName": ["1,4-Butanediol"],
         "TargetFlowUUID": ["09db39be-d9a6-4fc3-8d25-1f80b23e9131"],
         "TargetFlowContext": ["air/unspecified"],

@@ -62,7 +62,7 @@ def test_flowmap_with_custom_rules_match(source_flows, target_flows):
                 "context": "air/unspecified",
                 "unit": "kg",
             },
-            "conversion_factor": 1,
+            "conversion_factor": 1.0,
             "comment": "Identical names",
         }
     ]
@@ -78,7 +78,7 @@ def test_flowmap_to_glad(source_flows, target_flows):
         "SourceFlowContext": ["Air/(unspecified)"],
         "SourceUnit": ["kg"],
         "MatchCondition": [""],
-        "ConversionFactor": [1],
+        "ConversionFactor": [1.0],
         "TargetFlowName": ["1,4-Butanediol"],
         "TargetFlowUUID": ["09db39be-d9a6-4fc3-8d25-1f80b23e9131"],
         "TargetFlowContext": ["air/unspecified"],

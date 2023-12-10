@@ -2,14 +2,15 @@ from flowmapper.unit import Unit
 import math
 
 def test_conversion():
-    x = 0.8 * Unit('square_meter_year / t').value
-    assert x.to('(meter ** 2 * month) / kg').magnitude == 0.009600000000000001
+    u1 = Unit('square_meter_year / t')
+    u2 = Unit('(meter ** 2 * month) / kg')
+    assert u1.conversion_factor(u2) == 0.012
 
 def test_init():
     unit = Unit.from_dict(
         {"unitName": {"@xml:lang": "en", "#text": "M2A"}}, "unitName.#text"
     )
-    assert str(unit.value.units) == "square_meter_year"
+    assert unit.value == "square_meter_year"
     assert unit.raw_value == "M2A"
     assert unit.raw_object == {"unitName": {"@xml:lang": "en", "#text": "M2A"}}
 

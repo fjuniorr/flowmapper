@@ -2,7 +2,15 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any
 import flowmapper.jsonpath as jp
-from bw2io.units import normalize_units, DEFAULT_UNITS_CONVERSION
+from pint import UnitRegistry, errors
+import importlib.resources as resource
+from .utils import normalize_str
+from .constants import UNITS_NORMALIZATION
+
+ureg = UnitRegistry()
+
+with resource.as_file(resource.files('flowmapper').joinpath('data/units.txt')) as filepath:
+    ureg.load_definitions(filepath)
 
 @dataclass
 class Unit:
@@ -11,17 +19,16 @@ class Unit:
     raw_object: dict = field(default_factory=lambda: {})
 
     def __post_init__(self):
-        raw_value = self.value
-        self.value = normalize_units(self.value)
-        if raw_value != self.value:
-            self.raw_value = raw_value
+        if not self.raw_value:
+            self.raw_value = self.value
+        self.value = self.normalize(self.raw_value)
 
     @classmethod
     def from_dict(cls, d, spec):
         key = jp.root(spec)
         value = jp.extract(spec, d)
         result = Unit(
-            value = normalize_units(value),
+            value = None,
             raw_value = value,
             raw_object = {key: d.get(key)},
         )
@@ -33,16 +40,17 @@ class Unit:
     def __eq__(self, other):
         return self.value == other.value
 
-    def conversion_factor(self, to: Unit):        
+    def conversion_factor(self, to: Unit):
         if self.value == to.value:
-            result = [1.0]
+            result = 1.0
         else:
-            result = [
-                multiplier
-                for from_unit, to_unit, multiplier in DEFAULT_UNITS_CONVERSION 
-                if from_unit == self.value and to.value == to_unit
-            ]
-
-        result = float('nan') if not result else result[0]
-        
+            try:
+                result = ureg(self.value).to(ureg(to.value)).magnitude
+            except errors.DimensionalityError:
+                result = float('nan')
         return result
+
+    @staticmethod
+    def normalize(x):
+        s = normalize_str(x)
+        return UNITS_NORMALIZATION.get(s, s)

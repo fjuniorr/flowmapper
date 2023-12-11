@@ -6,11 +6,19 @@ from flowmapper.match import (
     match_identical_names,
 )
 
+
 def test_flowmap_mappings(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
     actual = flowmap.mappings[0]
-    assert list(actual.keys()) == ['from', 'to', 'conversion_factor', 'match_rule', 'info']
-    assert actual['match_rule'] == 'match_identical_names'
+    assert list(actual.keys()) == [
+        "from",
+        "to",
+        "conversion_factor",
+        "match_rule",
+        "info",
+    ]
+    assert actual["match_rule"] == "match_identical_names"
+
 
 def test_flowmap_to_randonneur(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
@@ -20,7 +28,7 @@ def test_flowmap_to_randonneur(source_flows, target_flows):
             "source": {
                 "name": "1,4-Butanediol",
                 "categories": ["Air", "(unspecified)"],
-                "unit": "kg"
+                "unit": "kg",
             },
             "target": {
                 "uuid": "09db39be-d9a6-4fc3-8d25-1f80b23e9131",
@@ -54,7 +62,7 @@ def test_flowmap_with_custom_rules_match(source_flows, target_flows):
             "source": {
                 "name": "1,4-Butanediol",
                 "categories": ["Air", "(unspecified)"],
-                "unit": "kg"
+                "unit": "kg",
             },
             "target": {
                 "uuid": "09db39be-d9a6-4fc3-8d25-1f80b23e9131",
@@ -114,3 +122,83 @@ def test_flowmap_export_unmatched(source_flows, target_flows):
         }
     ]
     assert actual == expected
+
+
+def test_flowmap_nomatch_rule(source_flows, target_flows):
+    nomatch = lambda flow: flow.context.value == "air/urban air close to ground"
+    flowmap = Flowmap(source_flows, target_flows, nomatch_rules=[nomatch])
+
+    actual_source_flows_nomatch = [flow.raw for flow in flowmap.source_flows_nomatch]
+    expected_source_flows_nomatch = [
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "high. pop."],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        }
+    ]
+    assert actual_source_flows_nomatch == expected_source_flows_nomatch
+
+    actual_source_flows = [flow.raw for flow in flowmap.source_flows]
+    expected_source_flows = [
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "(unspecified)"],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        }
+    ]
+    assert actual_source_flows == expected_source_flows
+
+
+def test_flowmap_nomatch_rule_false(source_flows, target_flows):
+    nomatch = lambda flow: flow.context.value == "water"
+    flowmap = Flowmap(source_flows, target_flows, nomatch_rules=[nomatch])
+
+    actual_source_flows_nomatch = [flow.raw for flow in flowmap.source_flows_nomatch]
+    expected_source_flows_nomatch = []
+    assert actual_source_flows_nomatch == expected_source_flows_nomatch
+
+    actual_source_flows = [flow.raw for flow in flowmap.source_flows]
+    expected_source_flows = [
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "(unspecified)"],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        },
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "high. pop."],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        },
+    ]
+    assert actual_source_flows == expected_source_flows
+
+
+def test_flowmap_nomatch_multiple_rules(source_flows, target_flows):
+    nomatch1 = lambda flow: flow.context.value == "air/urban air close to ground"
+    nomatch2 = lambda flow: flow.context.value == "air"
+    flowmap = Flowmap(source_flows, target_flows, nomatch_rules=[nomatch1, nomatch2])
+
+    actual_source_flows_nomatch = [flow.raw for flow in flowmap.source_flows_nomatch]
+    expected_source_flows_nomatch = [
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "(unspecified)"],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        },
+        {
+            "name": "1,4-Butanediol",
+            "categories": ["Air", "high. pop."],
+            "unit": "kg",
+            "CAS": "000110-63-4",
+        },
+    ]
+    assert actual_source_flows_nomatch == expected_source_flows_nomatch
+
+    actual_source_flows = [flow.raw for flow in flowmap.source_flows]
+    expected_source_flows = []
+    assert actual_source_flows == expected_source_flows

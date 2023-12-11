@@ -8,12 +8,48 @@ import pandas as pd
 from collections import Counter
 
 class Flowmap:
-    def __init__(self, source_flows: list[Flow], target_flows: list[Flow], rules: list[Callable[..., bool]] = None, disable_progress: bool = False):
+    def __init__(
+        self,
+        source_flows: list[Flow],
+        target_flows: list[Flow],
+        rules: list[Callable[..., bool]] = None,
+        nomatch_rules: list[Callable[..., bool]] = None,
+        disable_progress: bool = False,
+    ):
         self.disable_progress = disable_progress
-        self.source_flows = source_flows
-        self.target_flows = target_flows
         self.rules = rules if rules else match_rules()
-    
+        if nomatch_rules:
+            self.source_flows = []
+            self.source_flows_nomatch = []
+            
+            for flow in source_flows:
+                matched = False
+                for rule in nomatch_rules:
+                    if rule(flow):
+                        self.source_flows_nomatch.append(flow)
+                        matched = True
+                        break
+                if not matched:
+                    self.source_flows.append(flow)
+
+            self.target_flows = []
+            self.target_flows_nomatch = []
+
+            for flow in target_flows:
+                matched = False
+                for rule in nomatch_rules:
+                    if rule(flow):
+                        self.target_flows_nomatch.append(flow)
+                        matched = True
+                        break
+                if not matched:
+                    self.target_flows.append(flow)
+        else:
+            self.source_flows = source_flows
+            self.source_flows_nomatch = []
+            self.target_flows = target_flows
+            self.target_flows_nomatch = []
+
     @cached_property
     def mappings(self):
         result = []
@@ -111,9 +147,21 @@ class Flowmap:
         return result
 
     def statistics(self):
-        print(f'{len(self.source_flows)} source flows...')
-        print(f'{len(self.target_flows)} target flows...')
-        print(f'{len(self.mappings)} mappings ({len(self.matched_source) / len(self.source_flows):.2%} of total).')
+        source_msg = (
+            f"{len(self.source_flows)} source flows ({len(self.source_flows_nomatch)} excluded)..."
+            if self.source_flows_nomatch
+            else f"{len(self.source_flows)} source flows..."
+        )
+        print(source_msg)
+        target_msg = (
+            f"{len(self.target_flows)} target flows ({len(self.target_flows_nomatch)} excluded)..."
+            if self.target_flows_nomatch
+            else f"{len(self.target_flows)} target flows..."
+        )
+        print(target_msg)
+        print(
+            f"{len(self.mappings)} mappings ({len(self.matched_source) / len(self.source_flows):.2%} of total)."
+        )
 
     def to_randonneur(self):
         result = [

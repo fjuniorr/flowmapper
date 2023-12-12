@@ -162,6 +162,30 @@ class Flowmap:
         print(
             f"{len(self.mappings)} mappings ({len(self.matched_source) / len(self.source_flows):.2%} of total)."
         )
+        cardinalities = dict(Counter([x['cardinality'] for x in self.cardinalities]))
+        print(f"Mappings cardinalities: {str(cardinalities)}")
+
+    @cached_property
+    def cardinalities(self):
+        mappings = [(mapentry['from'].id, mapentry['to'].id) for mapentry in self.mappings]
+        lhs_counts = Counter([pair[0] for pair in mappings])
+        rhs_counts = Counter([pair[1] for pair in mappings])
+
+        result = []
+
+        for lhs, rhs in mappings:
+            lhs_count = lhs_counts[lhs]
+            rhs_count = rhs_counts[rhs]
+            if lhs_count == 1 and rhs_count == 1:
+                result.append({"from": lhs, "to": rhs, "cardinality": "1:1"})
+            elif lhs_count == 1 and rhs_count > 1:
+                result.append({"from": lhs, "to": rhs, "cardinality": "N:1"})
+            elif lhs_count > 1 and rhs_count == 1:
+                result.append({"from": lhs, "to": rhs, "cardinality": "1:N"})
+            elif lhs_count > 1 and rhs_count > 1:
+                result.append({"from": lhs, "to": rhs, "cardinality": "N:M"})
+
+        return sorted(result, key = lambda x: x['from'])
 
     def to_randonneur(self):
         result = [

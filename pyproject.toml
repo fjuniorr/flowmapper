@@ -71,6 +71,9 @@ packages = ["flowmapper"]
 [tool.setuptools.dynamic]
 version = {attr = "flowmapper.__version__"}
 
+[tool.setuptools.package-data]
+flowmapper = ["data/units.txt"]
+
 [tool.pytest.ini_options]
 addopts = "--cov flowmapper --cov-report term-missing --verbose"
 norecursedirs = [

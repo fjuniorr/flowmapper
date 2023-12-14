@@ -8,6 +8,27 @@ import pandas as pd
 from collections import Counter
 
 class Flowmap:
+    """
+    Crosswalk of flows from a source flow list to a target flow list.
+
+    This class provides functionalities to map and harmonize flow names, units, and other attributes from one flow list to another.
+
+    Attributes
+    ----------
+    disable_progress : bool
+        A flag to enable or disable progress display.
+    rules : list[Callable[..., bool]]
+        A list of functions that define the rules for matching flows.
+    source_flows : list[Flow]
+        The list of source flows to be mapped.
+    source_flows_nomatch : list[Flow]
+        The list of source flows that do not match any rule.
+    target_flows : list[Flow]
+        The list of target flows for mapping.
+    target_flows_nomatch : list[Flow]
+        The list of target flows that do not match any rule.
+
+    """
     def __init__(
         self,
         source_flows: list[Flow],
@@ -16,6 +37,23 @@ class Flowmap:
         nomatch_rules: list[Callable[..., bool]] = None,
         disable_progress: bool = False,
     ):
+        """
+        Initializes the Flowmap with source and target flows, along with optional matching rules.
+
+        Parameters
+        ----------
+        source_flows : list[Flow]
+            The list of source flows to be mapped.
+        target_flows : list[Flow]
+            The list of target flows for mapping.
+        rules : list[Callable[..., bool]], optional
+            Custom rules for matching source flows to target flows. Default is the set of rules defined in `match_rules`.
+        nomatch_rules : list[Callable[..., bool]], optional
+            Rules to identify flows that should not be matched.
+        disable_progress : bool, optional
+            If True, progress bar display during the mapping process is disabled.
+
+        """
         self.disable_progress = disable_progress
         self.rules = rules if rules else match_rules()
         if nomatch_rules:
@@ -52,6 +90,17 @@ class Flowmap:
 
     @cached_property
     def mappings(self):
+        """
+        Generates and returns a list of mappings from source flows to target flows based on the defined rules.
+
+        Each mapping includes the source flow, target flow, conversion factor, the rule that determined the match, and additional information.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries containing the mapping details.
+
+        """
         result = []
         for s in tqdm(self.source_flows, disable=self.disable_progress):
             for t in self.target_flows:
@@ -70,14 +119,41 @@ class Flowmap:
 
     @cached_property
     def matched_source_flows_ids(self):
+        """
+        Retrieves the IDs of source flows that have been successfully matched to target flows.
+
+        Returns
+        -------
+        set
+            A set of IDs representing the matched source flows.
+
+        """
         return {map_entry['from'].id for map_entry in self.mappings}
 
     @cached_property
     def matched_target_flows_ids(self):
+        """
+        Retrieves the IDs of target flows that have been successfully matched to source flows.
+
+        Returns
+        -------
+        set
+            A set of IDs representing the matched target flows.
+
+        """
         return {map_entry['to'].id for map_entry in self.mappings}
 
     @cached_property
     def matched_source(self):
+        """
+        Provides a list of source flows that have been successfully matched to target flows.
+
+        Returns
+        -------
+        list[Flow]
+            A list of matched source flow objects.
+
+        """
         result = [
             flow
             for flow in self.source_flows 
@@ -87,6 +163,15 @@ class Flowmap:
 
     @cached_property
     def unmatched_source(self):
+        """
+        Provides a list of source flows that have not been matched to any target flows.
+
+        Returns
+        -------
+        list[Flow]
+            A list of unmatched source flow objects.
+
+        """
         result = [
             flow 
             for flow in self.source_flows 
@@ -96,6 +181,15 @@ class Flowmap:
 
     @cached_property
     def matched_source_statistics(self):
+        """
+        Calculates statistics for matched source flows, including the number of matches and the matching percentage for each context.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing matching statistics for source flows.
+
+        """
         matched = Counter([flow.context.value for flow in self.matched_source])
         matched = pd.Series(matched).reset_index()
         matched.columns = ['context', 'matched']
@@ -113,6 +207,15 @@ class Flowmap:
 
     @cached_property
     def matched_target(self):
+        """
+        Provides a list of target flows that have been successfully matched to source flows.
+
+        Returns
+        -------
+        list[Flow]
+            A list of matched target flow objects.
+
+        """
         result = [
             flow
             for flow in self.target_flows 
@@ -122,6 +225,15 @@ class Flowmap:
 
     @cached_property
     def unmatched_target(self):
+        """
+        Provides a list of target flows that have not been matched to any source flows.
+
+        Returns
+        -------
+        list[Flow]
+            A list of unmatched target flow objects.
+
+        """
         result = [
             flow
             for flow in self.target_flows 
@@ -131,6 +243,15 @@ class Flowmap:
 
     @cached_property
     def matched_target_statistics(self):
+        """
+        Calculates statistics for matched target flows, including the number of matches and the matching percentage for each context.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing matching statistics for target flows.
+
+        """
         matched = Counter([flow.context.value for flow in self.matched_target])
         matched = pd.Series(matched).reset_index()
         matched.columns = ['context', 'matched']
@@ -147,6 +268,10 @@ class Flowmap:
         return result
 
     def statistics(self):
+        """
+        Prints out summary statistics for the flow mapping process, including the number of source and target flows, mappings, and cardinalities.
+
+        """
         source_msg = (
             f"{len(self.source_flows)} source flows ({len(self.source_flows_nomatch)} excluded)..."
             if self.source_flows_nomatch
@@ -167,6 +292,15 @@ class Flowmap:
 
     @cached_property
     def cardinalities(self):
+        """
+        Calculates and returns the cardinalities of mappings between source and target flows.
+
+        Returns
+        -------
+        list[dict]
+            A sorted list of dictionaries, each indicating the cardinality relationship between a pair of source and target flows.
+
+        """
         mappings = [(mapentry['from'].id, mapentry['to'].id) for mapentry in self.mappings]
         lhs_counts = Counter([pair[0] for pair in mappings])
         rhs_counts = Counter([pair[1] for pair in mappings])
@@ -188,6 +322,15 @@ class Flowmap:
         return sorted(result, key = lambda x: x['from'])
 
     def to_randonneur(self):
+        """
+        Formats the mapping results for exporting in a specific format, typically for use in another tool or system.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries representing the formatted mapping results.
+
+        """
         result = [
             format_match_result(map_entry['from'], 
                                 map_entry['to'],
@@ -198,6 +341,20 @@ class Flowmap:
         return result
 
     def to_glad(self, ensure_id: bool = False):
+        """
+        Formats the mapping results for exporting in GLAD format, optionally ensuring each flow has an identifier.
+
+        Parameters
+        ----------
+        ensure_id : bool, optional
+            If True, ensures each flow has an identifier, default is False.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing the formatted mapping results in GLAD format.
+
+        """
         data = []
         for map_entry in self.mappings:
             source_flow_id = map_entry['from'].uuid if map_entry['from'].uuid or not ensure_id else map_entry['from'].id

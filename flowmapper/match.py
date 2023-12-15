@@ -6,6 +6,7 @@ from .constants import (
     MISSING_FOSSIL_AND_BIOGENIC_CARBON_MAPPING,
     RANDOM_NAME_DIFFERENCES_MAPPING,
     NAME_DIFFERENCES_WITH_UNIT_CONVERSION_MAPPING,
+    ECOINVENT_UUID_39_310_MAPPING,
 )
 from .flow import Flow
 from .utils import rm_parentheses_roman_numerals, extract_country_code, rm_roman_numerals_ionic_state
@@ -37,6 +38,16 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
             'comment': match_info['comment']
         }
     return result
+
+def match_identical_uuid(s: Flow, t: Flow, comment: str = 'Identical uuid'):
+    is_match = True if s.uuid and t.uuid and s.uuid == t.uuid else False
+    if is_match:
+        return {'comment': comment}
+
+def match_mapped_uuid(s: Flow, t: Flow, comment: str = 'Mapped uuid differences'):
+    is_match = True if s.uuid and t.uuid and ECOINVENT_UUID_39_310_MAPPING.get(s.uuid) == t.uuid else False
+    if is_match:
+        return {'comment': comment}
 
 def match_identical_names_in_synonyms(s: Flow, t: Flow, comment: str = 'Identical synonyms'):
     is_match = True if t.synonyms and s.name.value in t.synonyms.value and s.context == t.context else False
@@ -116,6 +127,8 @@ def match_mapped_name_differences_with_unit_conversion(s: Flow, t: Flow):
 
 def match_rules(): 
     return [
+            match_identical_uuid,
+            match_mapped_uuid,
             match_identical_names,
             match_identical_names_in_synonyms,
             match_resources_with_suffix_in_ground,

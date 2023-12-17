@@ -15,10 +15,6 @@ class Flowmap:
 
     Attributes
     ----------
-    disable_progress : bool
-        A flag to enable or disable progress display.
-    rules : list[Callable[..., bool]]
-        A list of functions that define the rules for matching flows.
     source_flows : list[Flow]
         The list of source flows to be mapped.
     source_flows_nomatch : list[Flow]
@@ -118,29 +114,11 @@ class Flowmap:
         return result
 
     @cached_property
-    def matched_source_flows_ids(self):
-        """
-        Retrieves the IDs of source flows that have been successfully matched to target flows.
-
-        Returns
-        -------
-        set
-            A set of IDs representing the matched source flows.
-
-        """
+    def _matched_source_flows_ids(self):
         return {map_entry['from'].id for map_entry in self.mappings}
 
     @cached_property
-    def matched_target_flows_ids(self):
-        """
-        Retrieves the IDs of target flows that have been successfully matched to source flows.
-
-        Returns
-        -------
-        set
-            A set of IDs representing the matched target flows.
-
-        """
+    def _matched_target_flows_ids(self):
         return {map_entry['to'].id for map_entry in self.mappings}
 
     @cached_property
@@ -157,7 +135,7 @@ class Flowmap:
         result = [
             flow
             for flow in self.source_flows 
-            if flow.id in self.matched_source_flows_ids
+            if flow.id in self._matched_source_flows_ids
         ]
         return result
 
@@ -175,7 +153,7 @@ class Flowmap:
         result = [
             flow 
             for flow in self.source_flows 
-            if flow.id not in self.matched_source_flows_ids
+            if flow.id not in self._matched_source_flows_ids
         ]
         return result
 
@@ -219,7 +197,7 @@ class Flowmap:
         result = [
             flow
             for flow in self.target_flows 
-            if flow.id in self.matched_target_flows_ids
+            if flow.id in self._matched_target_flows_ids
         ]
         return result
 
@@ -237,7 +215,7 @@ class Flowmap:
         result = [
             flow
             for flow in self.target_flows 
-            if flow.id not in self.matched_target_flows_ids
+            if flow.id not in self._matched_target_flows_ids
         ]
         return result
 
@@ -269,7 +247,7 @@ class Flowmap:
 
     def statistics(self):
         """
-        Prints out summary statistics for the flow mapping process, including the number of source and target flows, mappings, and cardinalities.
+        Prints out summary statistics for the flow mapping process.
 
         """
         source_msg = (
@@ -287,11 +265,11 @@ class Flowmap:
         print(
             f"{len(self.mappings)} mappings ({len(self.matched_source) / len(self.source_flows):.2%} of total)."
         )
-        cardinalities = dict(Counter([x['cardinality'] for x in self.cardinalities]))
+        cardinalities = dict(Counter([x['cardinality'] for x in self._cardinalities]))
         print(f"Mappings cardinalities: {str(cardinalities)}")
 
     @cached_property
-    def cardinalities(self):
+    def _cardinalities(self):
         """
         Calculates and returns the cardinalities of mappings between source and target flows.
 
@@ -323,7 +301,7 @@ class Flowmap:
 
     def to_randonneur(self):
         """
-        Formats the mapping results for exporting in a specific format, typically for use in another tool or system.
+        Export mappings with randonneur data migration file format.
 
         Returns
         -------
@@ -342,7 +320,9 @@ class Flowmap:
 
     def to_glad(self, ensure_id: bool = False):
         """
-        Formats the mapping results for exporting in GLAD format, optionally ensuring each flow has an identifier.
+        Export mappings with GLAD flow mapping format, optionally ensuring each flow has an identifier.
+
+        Formats the mapping results according to Global LCA Data Access (GLAD) network initiative flow mapping format.
 
         Parameters
         ----------

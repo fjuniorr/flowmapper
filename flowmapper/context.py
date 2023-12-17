@@ -26,6 +26,9 @@ class Context:
     def __eq__(self, other):
         return self.value == other.value
 
+    def __hash__(self):
+        return hash(self.value)
+
     @staticmethod
     def ensure_list(x):
         return x.split('/') if isinstance(x, str) else x

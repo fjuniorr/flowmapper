@@ -130,7 +130,6 @@ def match_rules():
             match_identical_uuid,
             match_mapped_uuid,
             match_identical_names,
-            match_identical_names_in_synonyms,
             match_resources_with_suffix_in_ground,
             match_minor_random_name_differences,
             match_emissions_with_suffix_ion,
@@ -142,4 +141,5 @@ def match_rules():
             match_identical_cas_numbers,
             match_non_ionic_state,
             match_biogenic_to_non_fossil,
+            match_identical_names_in_synonyms,
     ]

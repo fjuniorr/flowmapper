@@ -47,7 +47,7 @@ def fields():
 def source_flows():
     fields = read_field_mapping("tests/data/field_mapping.py")
     result = [
-        Flow.from_dict(flow, fields["source"])
+        Flow(flow, fields["source"])
         for flow in read_flowlist("tests/data/sp.json")
     ]
     return result
@@ -57,7 +57,7 @@ def source_flows():
 def target_flows():
     fields = read_field_mapping("tests/data/field_mapping.py")
     result = [
-        Flow.from_dict(flow, fields["target"])
+        Flow(flow, fields["target"])
         for flow in read_flowlist("tests/data/ei.json")
     ]
     return result

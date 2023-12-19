@@ -15,16 +15,16 @@ logger = logging.getLogger(__name__)
 
 def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: dict):
     source_result = {
-                     **s.name.raw_object, 
-                     **s.context.raw_object,
-                     **s.unit.raw_object
+                     **s.name_raw_object, 
+                     **s.context_raw_object,
+                     **s.unit_raw_object
     }
     if s.uuid:
         source_result.update({s.fields['uuid']: s.uuid})
     
     target_result = {
                 'uuid': t.uuid,
-                'name': t.name.raw_value,
+                'name': t.name_raw_value,
                 'context': t.context.raw_value,
                 'unit': t.unit.raw_value
             }

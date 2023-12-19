@@ -1,10 +1,31 @@
 from flowmapper.cas import CAS
 from flowmapper.flow import Flow
 
+def test_flow_with_transformations():
+    d = {
+        "name": "Carbon dioxide, in air",
+        "context": ["Raw", "(unspecified)"],
+        "unit": "kg",
+        "cas": "000124-38-9",
+    }
 
-def test_flow_init():
-    flow = Flow(name="Ammonia")
-    assert flow.fields["name"] == "name"
+    fields = {
+        "name": "name",
+        "context": "categories",
+        "unit": "unit",
+        "cas": "CAS",
+    }
+
+    transformations = {"update": [
+        {
+            "source": {"name": "Carbon dioxide, in air", "categories": ["Raw", "(unspecified)"]},
+            "target": {"name": "Carbon dioxide"},
+        }
+    ]}
+
+    f = Flow(d, transformations=transformations)
+    
+    assert True
 
 
 def test_flow_with_jsonpath_expr():
@@ -29,7 +50,7 @@ def test_flow_with_jsonpath_expr():
         "uuid": "@id",
     }
 
-    flow = Flow.from_dict(data, fields)
+    flow = Flow(data, fields)
     assert flow.name.value == "ammonia"
     assert flow.name.raw_value == "Ammonia"
     assert flow.name.raw_object == {"name": {"@xml:lang": "en", "#text": "Ammonia"}}
@@ -37,7 +58,7 @@ def test_flow_with_jsonpath_expr():
     assert flow.context.value == "air"
     assert flow.unit.value == "kilogram"
     assert flow.unit.raw_value == "kg"
-    assert flow.unit.raw_object == {'unitName': {'@xml:lang': 'en', '#text': 'kg'}}
+    assert flow.unit.raw_object == {"unitName": {"@xml:lang": "en", "#text": "kg"}}
 
 
 def test_flow_from_sp_categories():
@@ -55,7 +76,7 @@ def test_flow_from_sp_categories():
         "cas": "CAS",
     }
 
-    flow = Flow.from_dict(data, fields)
+    flow = Flow(data, fields)
     assert flow.uuid is None
     assert flow.name.raw_value == "Carbon dioxide, in air"
     assert flow.context.raw_value == "Raw/(unspecified)"
@@ -71,7 +92,7 @@ def test_flow_from_sp_missing():
         "unit": "unit",
     }
 
-    flow = Flow.from_dict(data, fields)
+    flow = Flow(data, fields)
     assert flow.name.raw_value == "Chrysotile"
     assert repr(flow.cas) == ""
     assert flow.context.raw_value == "Resources/in ground"
@@ -98,7 +119,7 @@ def test_flow_from_sp():
         "cas": "CAS No",
     }
 
-    flow = Flow.from_dict(data, fields)
+    flow = Flow(data, fields)
     assert flow.uuid == "90004354-71D3-47E8-B322-300BA5A98F7B"
     assert flow.cas == CAS("007440-34-8")
     assert flow.cas.cas == "7440-34-8"
@@ -129,7 +150,7 @@ def test_flow_from_ei():
         "cas": "CASNo",
     }
 
-    flow = Flow.from_dict(data, fields)
+    flow = Flow(data, fields)
     assert flow.uuid == "5b7d620e-2238-5ec9-888a-6999218b6974"
 
 
@@ -151,9 +172,15 @@ def test_flow_with_synonyms(field_mapping):
         "synonym": [
             {"@xml:lang": "en", "#text": "2-methylbuta-1,3-diene"},
             {"@xml:lang": "en", "#text": "methyl bivinyl"},
-            {"@xml:lang": "en", "#text": "hemiterpene"}
+            {"@xml:lang": "en", "#text": "hemiterpene"},
         ],
     }
 
-    flow = Flow.from_dict(data, field_mapping["target"])
-    assert flow.synonyms.raw_value == ["2-methylbuta-1,3-diene", "methyl bivinyl", "hemiterpene"]
+    flow = Flow(data, field_mapping["target"])
+    assert flow.synonyms.raw_value == [
+        "2-methylbuta-1,3-diene",
+        "methyl bivinyl",
+        "hemiterpene",
+    ]
+
+

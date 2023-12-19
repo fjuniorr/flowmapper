@@ -202,13 +202,13 @@ class Flowmap:
         for map_entry in self.mappings:
             source_flow_id = map_entry['from'].uuid if map_entry['from'].uuid or not ensure_id else map_entry['from'].id
             row = {
-                    'SourceFlowName': map_entry['from'].name.raw_value,
+                    'SourceFlowName': map_entry['from'].name_raw_value,
                     'SourceFlowUUID': source_flow_id,
-                    'SourceFlowContext': map_entry['from'].context.raw_value,
-                    'SourceUnit': map_entry['from'].unit.raw_value,
+                    'SourceFlowContext': '/'.join(map_entry['from'].context_raw_value),
+                    'SourceUnit': map_entry['from'].unit_raw_value,
                     'MatchCondition': '',
                     'ConversionFactor': map_entry['conversion_factor'],
-                    'TargetFlowName': map_entry['to'].name.raw_value,
+                    'TargetFlowName': map_entry['to'].name_raw_value,
                     'TargetFlowUUID': map_entry['to'].uuid,
                     'TargetFlowContext': map_entry['to'].context.raw_value,
                     'TargetUnit': map_entry['to'].unit.raw_value,

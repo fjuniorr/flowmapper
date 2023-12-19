@@ -21,8 +21,8 @@ def test_match_mapped_name_differences(fields):
         "FlowUUID": "831f48fc-ca00-4534-9ede-730190b3bee0",
     }
 
-    s = Flow.from_dict(source, fields['source'])
-    t = Flow.from_dict(target, fields['target'])
+    s = Flow(source, fields['source'])
+    t = Flow(target, fields['target'])
 
     match = match_mapped_name_differences(s, t, mapping={'flurochloridone': 'fluorochloridone'}, comment = "Minor random name differences")
     assert match

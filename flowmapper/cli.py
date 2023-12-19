@@ -63,8 +63,8 @@ def map(
     if transformations:
             migration_spec = read_migration_files(*transformations)
             migrate_datasets(migration_spec, source_flows)
-    source_flows = [Flow.from_dict(flow, field_mapping['source']) for flow in source_flows]
-    target_flows = [Flow.from_dict(flow, field_mapping['target']) for flow in read_flowlist(target)]
+    source_flows = [Flow(flow, field_mapping['source']) for flow in source_flows]
+    target_flows = [Flow(flow, field_mapping['target']) for flow in read_flowlist(target)]
 
     flowmap = Flowmap(source_flows, target_flows)
     flowmap.statistics()

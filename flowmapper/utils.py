@@ -1,3 +1,4 @@
+import copy
 import json
 from collections import Counter
 from pathlib import Path
@@ -5,6 +6,7 @@ import hashlib
 import re
 from typing import Optional, Union
 import unicodedata
+from randonneur import migrate_datasets
 try:
     import tomllib
 except ModuleNotFoundError:
@@ -103,3 +105,8 @@ def extract_country_code(s: str) -> tuple[str, Optional[str]]:
 
 def normalize_str(s):
     return unicodedata.normalize('NFC', s).strip().lower()
+
+def transform_flow(flow, transformations):
+    result = [copy.copy(flow)]
+    migrate_datasets(transformations, result)
+    return result[0]

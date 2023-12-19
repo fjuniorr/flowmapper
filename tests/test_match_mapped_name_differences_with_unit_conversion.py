@@ -5,12 +5,12 @@ from flowmapper.flowmap import Flowmap
 def test_match_non_ionic_state():
     fields = {"name": "name", "context": "context", "unit": "unit"}
     s = [
-        Flow.from_dict({"name": "Ammonia, as N", "context": "air", "unit": "kg"}, fields),
-        Flow.from_dict({"name": "AOX (Adsorbable Organic Halogens)", "context": "air", "unit": "kg"}, fields),
+        Flow({"name": "Ammonia, as N", "context": "air", "unit": "kg"}, fields),
+        Flow({"name": "AOX (Adsorbable Organic Halogens)", "context": "air", "unit": "kg"}, fields),
     ]
     t = [
-        Flow.from_dict({"name": "Ammonia", "context": "air", "unit": "kg"}, fields),
-        Flow.from_dict({"name": "AOX, Adsorbable Organic Halogen as Cl", "context": "air", "unit": "kg"}, fields),
+        Flow({"name": "Ammonia", "context": "air", "unit": "kg"}, fields),
+        Flow({"name": "AOX, Adsorbable Organic Halogen as Cl", "context": "air", "unit": "kg"}, fields),
     ]
 
     flowmap = Flowmap(s, t)

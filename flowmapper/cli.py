@@ -11,7 +11,7 @@ from pathlib import Path
 from enum import Enum
 from randonneur import migrate_datasets
 from .flow import Flow
-from .utils import read_field_mapping, read_flowlist, read_migration_file
+from .utils import read_field_mapping, read_flowlist, read_migration_files
 from .flowmap import Flowmap
 try:
     import tomllib
@@ -48,7 +48,7 @@ def map(
     fields: Annotated[Path, typer.Option(help='Relationship between fields in source and target flowlists')],
     output_dir: Annotated[Path, typer.Option(help='Directory to save mapping and diagnostics files')] = Path('.'),
     format: Annotated[OutputFormat, typer.Option(help='Mapping file output format', case_sensitive=False)] = 'all',
-    transformations: Annotated[Path, typer.Option(help='Randonneur data migration file with changes to be applied to source flows before matching')] = None,
+    transformations: Annotated[list[Path], typer.Option("--transformations", "-t", help='Randonneur data migration file with changes to be applied to source flows before matching')] = None,
     unmatched_source: Annotated[bool, typer.Option(help='Write original source unmatched flows into separate file?')] = True,
     unmatched_target: Annotated[bool, typer.Option(help='Write original target unmatched flows into separate file?')] = True,
     matched_source: Annotated[bool, typer.Option(help='Write original source matched flows into separate file?')] = False,
@@ -61,7 +61,7 @@ def map(
     field_mapping = read_field_mapping(fields)
     source_flows = read_flowlist(source)
     if transformations:
-            migration_spec = read_migration_file(transformations)
+            migration_spec = read_migration_files(*transformations)
             migrate_datasets(migration_spec, source_flows)
     source_flows = [Flow.from_dict(flow, field_mapping['source']) for flow in source_flows]
     target_flows = [Flow.from_dict(flow, field_mapping['target']) for flow in read_flowlist(target)]

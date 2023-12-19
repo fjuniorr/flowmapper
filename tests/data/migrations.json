@@ -1,0 +1,16 @@
+[
+  {
+      "target": {"categories": ["Emissions to air", "low. pop., long-term"]},
+      "source": {
+          "name": "Cesium-134",
+          "categories": ["Emissions to air", "low. pop."],
+          "unit": "kBq"
+      }
+  },
+  {
+      "target": {"name": "Zinc, Zn 0.63%, in mixed ore"},
+      "source": {
+          "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore"
+      }
+  }
+]

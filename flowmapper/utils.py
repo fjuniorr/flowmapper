@@ -3,7 +3,7 @@ from collections import Counter
 from pathlib import Path
 import hashlib
 import re
-from typing import Optional
+from typing import Optional, Union
 import unicodedata
 try:
     import tomllib
@@ -52,9 +52,33 @@ def read_flowlist(filepath: Path):
         result = json.load(fs)
     return result
 
-def read_migration_file(filepath: Path):
-    with open(filepath, 'r') as fs:
-        result = {'update': json.load(fs)}
+def read_migration_files(*filepaths: Union[str, Path]):
+    """
+    Read and aggregate migration data from multiple JSON files.
+
+    This function opens and reads a series of JSON files, each containing migration data as a list of dicts without the change type.
+    It aggregates all changes into a single list and returns it wrapped in a dictionary 
+    under the change type 'update'.
+
+    Parameters
+    ----------
+    *filepaths : Path
+        Variable length argument list of Path objects.
+
+    Returns
+    -------
+    dict
+        A dictionary containing a single key 'update', which maps to a list. This list is 
+        an aggregation of the data from all the JSON files read.
+    """
+    migration_data = []
+    
+    for filepath in filepaths:
+        filepath = Path(filepath)
+        with open(filepath, 'r') as fs:
+            migration_data.extend(json.load(fs))
+    
+    result = {'update': migration_data}
     return result
 
 def rm_parentheses_roman_numerals(s: str):

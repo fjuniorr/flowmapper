@@ -16,5 +16,29 @@
         ],
         "unit": "kg",
         "CAS": "000110-63-4"
-    }
+    },
+    {
+      "name": "Cesium-134",
+      "unit": "kBq",
+      "categories": [
+        "Emissions to air",
+        "low. pop."
+      ]
+  },
+    {
+      "name": "Cesium-134",
+      "unit": "kBq",
+      "categories": [
+        "Emissions to soil",
+        ""
+      ]
+    },
+    {
+      "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+      "unit": "kg",
+      "categories": [
+        "Resources",
+        "in ground"
+      ]
+  }
 ]

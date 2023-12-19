@@ -119,7 +119,18 @@ def test_flowmap_export_unmatched(source_flows, target_flows):
             "categories": ["Air", "high. pop."],
             "unit": "kg",
             "CAS": "000110-63-4",
-        }
+        },
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
+        },
     ]
     assert actual == expected
 
@@ -146,7 +157,18 @@ def test_flowmap_nomatch_rule(source_flows, target_flows):
             "categories": ["Air", "(unspecified)"],
             "unit": "kg",
             "CAS": "000110-63-4",
-        }
+        },
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
+        },
     ]
     assert actual_source_flows == expected_source_flows
 
@@ -172,6 +194,17 @@ def test_flowmap_nomatch_rule_false(source_flows, target_flows):
             "categories": ["Air", "high. pop."],
             "unit": "kg",
             "CAS": "000110-63-4",
+        },
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
         },
     ]
     assert actual_source_flows == expected_source_flows
@@ -200,5 +233,17 @@ def test_flowmap_nomatch_multiple_rules(source_flows, target_flows):
     assert actual_source_flows_nomatch == expected_source_flows_nomatch
 
     actual_source_flows = [flow.raw for flow in flowmap.source_flows]
-    expected_source_flows = []
+    expected_source_flows = [
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
+        },
+    ]
     assert actual_source_flows == expected_source_flows

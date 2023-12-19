@@ -115,7 +115,18 @@ def test_matched_flows(tmp_path):
             "categories": ["Air", "high. pop."],
             "unit": "kg",
             "CAS": "000110-63-4",
-        }
+        },
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
+        },
     ]
     assert matched_source == [
         {
@@ -188,7 +199,19 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
     with open(tmp_path / "sp-ei-matched-target.json") as fs:
         matched_target = json.load(fs)
 
-    assert unmatched_source == []
+    assert unmatched_source == [
+        {
+            "name": "Cesium-134",
+            "unit": "kBq",
+            "categories": ["Emissions to air", "low. pop."],
+        },
+        {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
+        {
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
+            "unit": "kg",
+            "categories": ["Resources", "in ground"],
+        },
+    ]
     assert matched_source == [
         {
             "name": "1,4-Butanediol",
@@ -201,7 +224,7 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
             "categories": ["Air", "(unspecified)"],
             "unit": "kg",
             "CAS": "000110-63-4",
-        }
+        },
     ]
     assert unmatched_target == []
     assert matched_target == [

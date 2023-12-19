@@ -221,7 +221,7 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
         },
         {
             "name": "1,4-Butanediol",
-            "categories": ["Air", "(unspecified)"],
+            "categories": ["Air", "high. pop."],
             "unit": "kg",
             "CAS": "000110-63-4",
         },
@@ -294,11 +294,11 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
         {
             "name": "Cesium-134",
             "unit": "kBq",
-            "categories": ["Emissions to air", "low. pop., long-term"],
+            "categories": ["Emissions to air", "low. pop."],
         },
         {"name": "Cesium-134", "unit": "kBq", "categories": ["Emissions to soil", ""]},
         {
-            "name": "Zinc, Zn 0.63%, in mixed ore",
+            "name": "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore",
             "unit": "kg",
             "categories": ["Resources", "in ground"],
         },
@@ -312,7 +312,7 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
         },
         {
             "name": "1,4-Butanediol",
-            "categories": ["Air", "(unspecified)"],
+            "categories": ["Air", "high. pop."],
             "unit": "kg",
             "CAS": "000110-63-4",
         },

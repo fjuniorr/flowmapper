@@ -59,11 +59,9 @@ def map(
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     field_mapping = read_field_mapping(fields)
-    source_flows = read_flowlist(source)
     if transformations:
-            migration_spec = read_migration_files(*transformations)
-            migrate_datasets(migration_spec, source_flows)
-    source_flows = [Flow(flow, field_mapping['source']) for flow in source_flows]
+            transformations = read_migration_files(*transformations)
+    source_flows = [Flow(flow, field_mapping['source'], transformations) for flow in read_flowlist(source)]
     target_flows = [Flow(flow, field_mapping['target']) for flow in read_flowlist(target)]
 
     flowmap = Flowmap(source_flows, target_flows)

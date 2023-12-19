@@ -52,6 +52,11 @@ def read_flowlist(filepath: Path):
         result = json.load(fs)
     return result
 
+def read_migration_file(filepath: Path):
+    with open(filepath, 'r') as fs:
+        result = {'update': json.load(fs)}
+    return result
+
 def rm_parentheses_roman_numerals(s: str):
     pattern = r'\(\s*([ivxlcdm]+)\s*\)'
     return re.sub(pattern, r'\1', s)

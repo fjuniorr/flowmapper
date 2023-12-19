@@ -33,7 +33,8 @@ dependencies = [
     "tqdm",
     "pandas[excel]",
     "typer",
-    "pint"
+    "pint",
+    "randonneur"
 ]
 
 [project.urls]

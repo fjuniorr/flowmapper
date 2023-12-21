@@ -52,20 +52,29 @@ class Flowmap:
 
     @cached_property
     def mappings(self):
-        result = []
+        all_mappings = []
         for s in tqdm(self.source_flows, disable=self.disable_progress):
             for t in self.target_flows:
                 for rule in self.rules:
                     is_match = rule(s, t)
                     if is_match:
-                        result.append(
+                        all_mappings.append(
                             {'from': s,
                              'to': t,
                              'conversion_factor': s.unit.conversion_factor(t.unit),
                              'match_rule': rule.__name__,
+                             'match_rule_priority': self.rules.index(rule),
                              'info': is_match}
                         )
                         break
+        result = []
+        seen_sources = set()
+        sorted_mappings = sorted(all_mappings, key=lambda x: (x['from'], x['match_rule_priority']))
+        for mapping in sorted_mappings:
+            if mapping['from'] not in seen_sources:
+                result.append(mapping)
+                seen_sources.add(mapping['from'])
+        
         return result
 
     @cached_property

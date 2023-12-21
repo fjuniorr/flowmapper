@@ -3,7 +3,7 @@ import flowmapper.jsonpath as jp
 from .unit import Unit
 from .cas import CAS
 from .context import Context
-from .utils import generate_flow_id, transform_flow
+from .utils import generate_flow_id, transform_flow, find_transformation
 from .flowproperty import FlowProperty
 
 
@@ -14,8 +14,9 @@ class Flow:
         fields=None,
         transformations=None,
     ):
+        transformation = find_transformation(original, transformations)
         transformed = (
-            transform_flow(original, transformations) if transformations else original
+            transform_flow(original, transformation) if transformation else original
         )
         fields = fields if fields else {k:k for k in original}
         uuid_spec = fields.get("uuid")
@@ -26,6 +27,7 @@ class Flow:
         cas_spec = fields.get("cas")
 
         self.id = generate_flow_id(original)
+        self.conversion_factor = transformation.get("conversion_factor") if transformation else None
         self.uuid = jp.extract(uuid_spec, transformed)
         self.uuid_raw_value = jp.extract(uuid_spec, original)
         self.uuid_raw_object = jp.extract(uuid_spec, original, "object")

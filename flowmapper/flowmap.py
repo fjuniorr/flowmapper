@@ -61,7 +61,7 @@ class Flowmap:
                         all_mappings.append(
                             {'from': s,
                              'to': t,
-                             'conversion_factor': s.unit.conversion_factor(t.unit),
+                             'conversion_factor': s.conversion_factor if s.conversion_factor else s.unit.conversion_factor(t.unit),
                              'match_rule': rule.__name__,
                              'match_rule_priority': self.rules.index(rule),
                              'info': is_match}

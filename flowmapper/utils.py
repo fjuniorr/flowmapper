@@ -106,7 +106,17 @@ def extract_country_code(s: str) -> tuple[str, Optional[str]]:
 def normalize_str(s):
     return unicodedata.normalize('NFC', s).strip().lower()
 
-def transform_flow(flow, transformations):
-    result = [copy.copy(flow)]
-    migrate_datasets(transformations, result)
-    return result[0]
+def transform_flow(flow, transformation):
+    result = copy.copy(flow)
+    result.update(transformation['target'])
+    return result
+
+def matcher(source, target):
+    return all(target.get(key) == value for key, value in source.items())
+
+def find_transformation(flow, transformations):
+    if not transformations:
+        return None
+    for transformation in transformations['update']:
+        if matcher(transformation['source'], flow):
+            return transformation

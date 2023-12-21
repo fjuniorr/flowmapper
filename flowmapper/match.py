@@ -20,7 +20,7 @@ def format_match_result(s: Flow, t: Flow, conversion_factor: float, match_info: 
                      **s.unit_raw_object
     }
     if s.uuid:
-        source_result.update({s.fields['uuid']: s.uuid})
+        source_result.update(**s.uuid_raw_object)
     
     target_result = {
                 'uuid': t.uuid,

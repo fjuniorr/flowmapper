@@ -17,20 +17,20 @@ def test_format_glad(tmp_path):
         [
             "map",
             "tests/data/sp.json",
-            "tests/data/ei.json",
+            "tests/data/ei-3.7.json",
             "--format",
             "glad",
             "--fields",
-            "tests/data/field_mapping.py",
+            "tests/data/field_mapping-sp-ei.py",
             "--output-dir",
             str(tmp_path),
         ],
     )
     expected_files = sorted(
         [
-            tmp_path / "sp-ei.xlsx",
-            tmp_path / "sp-ei-unmatched-source.json",
-            tmp_path / "sp-ei-unmatched-target.json",
+            tmp_path / "sp-ei-3.7.xlsx",
+            tmp_path / "sp-ei-3.7-unmatched-source.json",
+            tmp_path / "sp-ei-3.7-unmatched-target.json",
         ]
     )
 
@@ -46,20 +46,20 @@ def test_format_randonneur(tmp_path):
         [
             "map",
             "tests/data/sp.json",
-            "tests/data/ei.json",
+            "tests/data/ei-3.7.json",
             "--format",
             "randonneur",
             "--fields",
-            "tests/data/field_mapping.py",
+            "tests/data/field_mapping-sp-ei.py",
             "--output-dir",
             str(tmp_path),
         ],
     )
     expected_files = sorted(
         [
-            tmp_path / "sp-ei.json",
-            tmp_path / "sp-ei-unmatched-source.json",
-            tmp_path / "sp-ei-unmatched-target.json",
+            tmp_path / "sp-ei-3.7.json",
+            tmp_path / "sp-ei-3.7-unmatched-source.json",
+            tmp_path / "sp-ei-3.7-unmatched-target.json",
         ]
     )
 
@@ -75,38 +75,38 @@ def test_matched_flows(tmp_path):
         [
             "map",
             "tests/data/sp.json",
-            "tests/data/ei.json",
+            "tests/data/ei-3.7.json",
             "--matched-source",
             "--matched-target",
             "--fields",
-            "tests/data/field_mapping.py",
+            "tests/data/field_mapping-sp-ei.py",
             "--output-dir",
             str(tmp_path),
         ],
     )
     expected_files = sorted(
         [
-            tmp_path / "sp-ei.json",
-            tmp_path / "sp-ei.xlsx",
-            tmp_path / "sp-ei-unmatched-source.json",
-            tmp_path / "sp-ei-matched-source.json",
-            tmp_path / "sp-ei-unmatched-target.json",
-            tmp_path / "sp-ei-matched-target.json",
+            tmp_path / "sp-ei-3.7.json",
+            tmp_path / "sp-ei-3.7.xlsx",
+            tmp_path / "sp-ei-3.7-unmatched-source.json",
+            tmp_path / "sp-ei-3.7-matched-source.json",
+            tmp_path / "sp-ei-3.7-unmatched-target.json",
+            tmp_path / "sp-ei-3.7-matched-target.json",
         ]
     )
 
     files = sorted(tmp_path.glob("**/*"))
 
-    with open(tmp_path / "sp-ei-unmatched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-source.json") as fs:
         unmatched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-source.json") as fs:
         matched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-unmatched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-target.json") as fs:
         unmatched_target = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-target.json") as fs:
         matched_target = json.load(fs)
 
     assert unmatched_source == [
@@ -134,7 +134,12 @@ def test_matched_flows(tmp_path):
             "categories": ["Air", "(unspecified)"],
             "unit": "kg",
             "CAS": "000110-63-4",
-        }
+        },
+        {
+            "name": "Ammonia, FR",
+            "unit": "kg",
+            "categories": ["Emissions to air", "low. pop."],
+        },
     ]
     assert unmatched_target == []
     assert matched_target == [
@@ -150,7 +155,22 @@ def test_matched_flows(tmp_path):
                 "subcompartment": {"@xml:lang": "en", "#text": "unspecified"},
             },
             "synonym": {"@xml:lang": "en", "#text": "Butylene glycol"},
-        }
+        },
+        {
+            "@id": "0f440cc0-0f74-446d-99d6-8ff0e97a2444",
+            "@unitId": "487df68b-4994-4027-8fdc-a4dc298257b7",
+            "@casNumber": "007664-41-7",
+            "name": {"@xml:lang": "en", "#text": "Ammonia"},
+            "unitName": {"@xml:lang": "en", "#text": "kg"},
+            "compartment": {
+                "@subcompartmentId": "be7e06e9-0bf5-462e-99dc-fe4aee383c48",
+                "compartment": {"@xml:lang": "en", "#text": "air"},
+                "subcompartment": {
+                    "@xml:lang": "en",
+                    "#text": "non-urban air or from high stacks",
+                },
+            },
+        },
     ]
 
     assert result.exit_code == 0
@@ -163,40 +183,40 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
         [
             "map",
             "tests/data/sp.json",
-            "tests/data/ei.json",
+            "tests/data/ei-3.7.json",
             "--transformations",
             "tests/data/transformations.json",
             "--matched-source",
             "--matched-target",
             "--fields",
-            "tests/data/field_mapping.py",
+            "tests/data/field_mapping-sp-ei.py",
             "--output-dir",
             str(tmp_path),
         ],
     )
     expected_files = sorted(
         [
-            tmp_path / "sp-ei.json",
-            tmp_path / "sp-ei.xlsx",
-            tmp_path / "sp-ei-unmatched-source.json",
-            tmp_path / "sp-ei-matched-source.json",
-            tmp_path / "sp-ei-unmatched-target.json",
-            tmp_path / "sp-ei-matched-target.json",
+            tmp_path / "sp-ei-3.7.json",
+            tmp_path / "sp-ei-3.7.xlsx",
+            tmp_path / "sp-ei-3.7-unmatched-source.json",
+            tmp_path / "sp-ei-3.7-matched-source.json",
+            tmp_path / "sp-ei-3.7-unmatched-target.json",
+            tmp_path / "sp-ei-3.7-matched-target.json",
         ]
     )
 
     files = sorted(tmp_path.glob("**/*"))
 
-    with open(tmp_path / "sp-ei-unmatched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-source.json") as fs:
         unmatched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-source.json") as fs:
         matched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-unmatched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-target.json") as fs:
         unmatched_target = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-target.json") as fs:
         matched_target = json.load(fs)
 
     assert unmatched_source == [
@@ -225,6 +245,11 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
             "unit": "kg",
             "CAS": "000110-63-4",
         },
+        {
+            "name": "Ammonia, FR",
+            "unit": "kg",
+            "categories": ["Emissions to air", "low. pop."],
+        },
     ]
     assert unmatched_target == []
     assert matched_target == [
@@ -240,11 +265,27 @@ def test_matched_flows_with_randonneur_transformations(tmp_path):
                 "subcompartment": {"@xml:lang": "en", "#text": "unspecified"},
             },
             "synonym": {"@xml:lang": "en", "#text": "Butylene glycol"},
-        }
+        },
+        {
+            "@id": "0f440cc0-0f74-446d-99d6-8ff0e97a2444",
+            "@unitId": "487df68b-4994-4027-8fdc-a4dc298257b7",
+            "@casNumber": "007664-41-7",
+            "name": {"@xml:lang": "en", "#text": "Ammonia"},
+            "unitName": {"@xml:lang": "en", "#text": "kg"},
+            "compartment": {
+                "@subcompartmentId": "be7e06e9-0bf5-462e-99dc-fe4aee383c48",
+                "compartment": {"@xml:lang": "en", "#text": "air"},
+                "subcompartment": {
+                    "@xml:lang": "en",
+                    "#text": "non-urban air or from high stacks",
+                },
+            },
+        },
     ]
 
     assert result.exit_code == 0
     assert expected_files == files
+
 
 def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
     result = runner.invoke(
@@ -252,7 +293,7 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
         [
             "map",
             "tests/data/sp.json",
-            "tests/data/ei.json",
+            "tests/data/ei-3.7.json",
             "--transformations",
             "tests/data/transformations.json",
             "--transformations",
@@ -260,34 +301,34 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
             "--matched-source",
             "--matched-target",
             "--fields",
-            "tests/data/field_mapping.py",
+            "tests/data/field_mapping-sp-ei.py",
             "--output-dir",
             str(tmp_path),
         ],
     )
     expected_files = sorted(
         [
-            tmp_path / "sp-ei.json",
-            tmp_path / "sp-ei.xlsx",
-            tmp_path / "sp-ei-unmatched-source.json",
-            tmp_path / "sp-ei-matched-source.json",
-            tmp_path / "sp-ei-unmatched-target.json",
-            tmp_path / "sp-ei-matched-target.json",
+            tmp_path / "sp-ei-3.7.json",
+            tmp_path / "sp-ei-3.7.xlsx",
+            tmp_path / "sp-ei-3.7-unmatched-source.json",
+            tmp_path / "sp-ei-3.7-matched-source.json",
+            tmp_path / "sp-ei-3.7-unmatched-target.json",
+            tmp_path / "sp-ei-3.7-matched-target.json",
         ]
     )
 
     files = sorted(tmp_path.glob("**/*"))
 
-    with open(tmp_path / "sp-ei-unmatched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-source.json") as fs:
         unmatched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-source.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-source.json") as fs:
         matched_source = json.load(fs)
 
-    with open(tmp_path / "sp-ei-unmatched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-unmatched-target.json") as fs:
         unmatched_target = json.load(fs)
 
-    with open(tmp_path / "sp-ei-matched-target.json") as fs:
+    with open(tmp_path / "sp-ei-3.7-matched-target.json") as fs:
         matched_target = json.load(fs)
 
     assert unmatched_source == [
@@ -316,6 +357,11 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
             "unit": "kg",
             "CAS": "000110-63-4",
         },
+        {
+            "name": "Ammonia, FR",
+            "unit": "kg",
+            "categories": ["Emissions to air", "low. pop."],
+        },
     ]
     assert unmatched_target == []
     assert matched_target == [
@@ -331,7 +377,22 @@ def test_matched_flows_with_multiple_randonneur_transformations(tmp_path):
                 "subcompartment": {"@xml:lang": "en", "#text": "unspecified"},
             },
             "synonym": {"@xml:lang": "en", "#text": "Butylene glycol"},
-        }
+        },
+        {
+            "@id": "0f440cc0-0f74-446d-99d6-8ff0e97a2444",
+            "@unitId": "487df68b-4994-4027-8fdc-a4dc298257b7",
+            "@casNumber": "007664-41-7",
+            "name": {"@xml:lang": "en", "#text": "Ammonia"},
+            "unitName": {"@xml:lang": "en", "#text": "kg"},
+            "compartment": {
+                "@subcompartmentId": "be7e06e9-0bf5-462e-99dc-fe4aee383c48",
+                "compartment": {"@xml:lang": "en", "#text": "air"},
+                "subcompartment": {
+                    "@xml:lang": "en",
+                    "#text": "non-urban air or from high stacks",
+                },
+            },
+        },
     ]
 
     assert result.exit_code == 0

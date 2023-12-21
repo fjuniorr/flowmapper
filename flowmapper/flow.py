@@ -27,6 +27,7 @@ class Flow:
 
         self.id = generate_flow_id(original)
         self.uuid = jp.extract(uuid_spec, original)
+        self.uuid_raw_object = jp.extract(uuid_spec, original, "object")
         self.name = FlowProperty.from_dict(transformed, name_spec)
         self.name_raw_value = jp.extract(name_spec, original)
         self.name_raw_object = jp.extract(name_spec, original, "object")

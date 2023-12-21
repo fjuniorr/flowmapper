@@ -40,5 +40,13 @@
         "Resources",
         "in ground"
       ]
+  },
+  {
+    "name": "Ammonia, FR",
+    "unit": "kg",
+    "categories": [
+      "Emissions to air",
+      "low. pop."
+    ]
   }
 ]

@@ -53,3 +53,6 @@ class Flow:
 
     def __hash__(self):
         return hash(self.id)
+
+    def __lt__(self, other):
+        return self.name.raw_value < other.name.raw_value

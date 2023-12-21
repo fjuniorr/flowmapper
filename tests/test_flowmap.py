@@ -15,6 +15,7 @@ def test_flowmap_mappings(source_flows, target_flows):
         "to",
         "conversion_factor",
         "match_rule",
+        "match_rule_priority",
         "info",
     ]
     assert actual["match_rule"] == "match_identical_names"

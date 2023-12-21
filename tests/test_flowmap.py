@@ -2,7 +2,6 @@ import pandas as pd
 from flowmapper.flowmap import Flowmap
 from flowmapper.match import (
     match_emissions_with_suffix_ion,
-    match_minor_land_name_differences,
     match_identical_names,
 )
 
@@ -64,7 +63,7 @@ def test_flowmap_with_custom_rules_no_match(source_flows, target_flows):
     flowmap = Flowmap(
         source_flows,
         target_flows,
-        rules=[match_emissions_with_suffix_ion, match_minor_land_name_differences],
+        rules=[match_emissions_with_suffix_ion],
     )
     actual = flowmap.mappings
     expected = []
@@ -368,7 +367,7 @@ def test_flowmap_mappings_ei39_ei310(flows_ei39, flows_ei310):
                 "unit": "kg",
             },
             "conversion_factor": 1.0,
-            "comment": "Mapped uuid differences",
+            "comment": "Identical uuid",
         }
     ]
     assert actual == expected

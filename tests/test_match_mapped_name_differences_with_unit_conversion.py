@@ -17,12 +17,6 @@ def test_match_non_ionic_state():
     actual = flowmap.to_randonneur()
     expected = [
         {
-            "source": {"name": "Ammonia, as N", "context": "air", "unit": "kg"},
-            "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": "kg"},
-            "conversion_factor": 1.0,
-            "comment": "Mapped name differences with unit conversions",
-        },
-        {
             "source": {"name": "AOX (Adsorbable Organic Halogens)", "context": "air", "unit": "kg"},
             "target": {
                 "uuid": None,
@@ -33,6 +27,12 @@ def test_match_non_ionic_state():
             "conversion_factor": 1.0,
             "comment": "Mapped name differences with unit conversions",
         },
+        {
+            "source": {"name": "Ammonia, as N", "context": "air", "unit": "kg"},
+            "target": {"uuid": None, "name": "Ammonia", "context": "air", "unit": "kg"},
+            "conversion_factor": 1.0,
+            "comment": "Mapped name differences with unit conversions",
+        }
     ]
     diff = DeepDiff(actual, expected)
     assert not diff

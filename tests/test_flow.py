@@ -1,7 +1,7 @@
 from flowmapper.cas import CAS
 from flowmapper.flow import Flow
 
-def test_flow_with_transformations():
+def test_flow_with_transformations_repr():
     d = {
         "name": "Carbon dioxide, in air",
         "context": ["Raw", "(unspecified)"],
@@ -9,23 +9,16 @@ def test_flow_with_transformations():
         "cas": "000124-38-9",
     }
 
-    fields = {
-        "name": "name",
-        "context": "categories",
-        "unit": "unit",
-        "cas": "CAS",
-    }
-
     transformations = {"update": [
         {
-            "source": {"name": "Carbon dioxide, in air", "categories": ["Raw", "(unspecified)"]},
+            "source": {"name": "Carbon dioxide, in air", "context": ["Raw", "(unspecified)"]},
             "target": {"name": "Carbon dioxide"},
         }
     ]}
 
     f = Flow(d, transformations=transformations)
     
-    assert True
+    assert repr(f) == "Carbon dioxide, in air* (in kg) <Raw/(unspecified)> [uuid:None]"
 
 
 def test_flow_with_jsonpath_expr():

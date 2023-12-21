@@ -48,7 +48,8 @@ class Flow:
         self.transformed = transformed
 
     def __repr__(self) -> str:
-        return f"{self.name} (in {self.unit.value}) <{self.context.value}>"
+        transformed = "*" if self.raw != self.transformed else ""
+        return f"{self.name_raw_value}{transformed} (in {self.unit.raw_value}) <{self.context.raw_value}> [uuid:{self.uuid_raw_value}]"
 
     def __eq__(self, other):
         return self.id == other.id

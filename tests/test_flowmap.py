@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 from flowmapper import Flowmap
 from flowmapper.match import (
     match_emissions_with_suffix_ion,
@@ -29,6 +30,12 @@ def test_flowmap_to_randonneur(source_flows, target_flows, snapshot):
     actual = flowmap.to_randonneur()
     assert actual == snapshot
 
+def test_flowmap_to_randonneur_export(source_flows, target_flows, snapshot, tmp_path):
+    flowmap = Flowmap(source_flows, target_flows)
+    flowmap.to_randonneur(tmp_path / "randonneur.json")
+    with open(tmp_path / "randonneur.json", "r") as fs:
+        actual = json.load(fs)
+    assert actual == snapshot
 
 def test_flowmap_with_custom_rules_no_match(source_flows, target_flows, snapshot):
     flowmap = Flowmap(
@@ -70,6 +77,30 @@ def test_flowmap_to_glad(source_flows, target_flows):
     }
     assert actual.equals(pd.DataFrame(expected))
 
+def test_flowmap_to_glad_export(source_flows, target_flows, tmp_path):
+    flowmap = Flowmap(source_flows, target_flows)
+    flowmap.to_glad(tmp_path / "glad.xlsx")
+    actual = pd.read_excel(tmp_path / "glad.xlsx")
+    expected = {
+        "SourceFlowName": ["1,4-Butanediol", "Ammonia, FR"],
+        "SourceFlowUUID": [float("nan"), float("nan")],
+        "SourceFlowContext": ["Air/(unspecified)", "Emissions to air/low. pop."],
+        "SourceUnit": ["kg", "kg"],
+        "MatchCondition": [float("nan"), float("nan")],
+        "ConversionFactor": [1, 1],
+        "TargetFlowName": ["1,4-Butanediol", "Ammonia"],
+        "TargetFlowUUID": [
+            "09db39be-d9a6-4fc3-8d25-1f80b23e9131",
+            "0f440cc0-0f74-446d-99d6-8ff0e97a2444",
+        ],
+        "TargetFlowContext": [
+            "air/unspecified",
+            "air/non-urban air or from high stacks",
+        ],
+        "TargetUnit": ["kg", "kg"],
+        "MemoMapper": ["Identical names", "Names with country code"],
+    }
+    assert actual.equals(pd.DataFrame(expected))
 
 def test_flowmap_export_matched(source_flows, target_flows, snapshot):
     flowmap = Flowmap(source_flows, target_flows)

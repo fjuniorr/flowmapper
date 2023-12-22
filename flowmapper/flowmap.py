@@ -3,8 +3,10 @@ from .flow import Flow
 from .match import match_rules, format_match_result
 from .unit import Unit
 from tqdm import tqdm
-from typing import Callable
+from typing import Callable, Optional
 import pandas as pd
+from pathlib import Path
+import json
 from collections import Counter
 
 class Flowmap:
@@ -316,9 +318,14 @@ class Flowmap:
 
         return sorted(result, key = lambda x: x['from'])
 
-    def to_randonneur(self):
+    def to_randonneur(self, path: Optional[Path] = None):
         """
         Export mappings using randonneur data migration file format.
+
+        Parameters
+        ----------
+        path : Path, optional
+            If provided export the output file to disk.
 
         Returns
         -------
@@ -333,9 +340,17 @@ class Flowmap:
                                 map_entry['info']) 
             for map_entry in self.mappings
         ]
-        return result
 
-    def to_glad(self, ensure_id: bool = False):
+        if not path:
+            return result
+        else:
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, 'w') as fs: 
+                json.dump(result, fs, indent=2)
+        
+
+    def to_glad(self, path: Optional[Path] = None, ensure_id: bool = False):
         """
         Export mappings using GLAD flow mapping format, optionally ensuring each flow has an identifier.
 
@@ -343,6 +358,8 @@ class Flowmap:
 
         Parameters
         ----------
+        path : Path, optional
+            If provided export the output file to disk.
         ensure_id : bool, optional
             If True, ensures each flow has an identifier, default is False.
 
@@ -370,4 +387,11 @@ class Flowmap:
                 }
             data.append(row)
 
-        return pd.DataFrame(data)        
+        result = pd.DataFrame(data)
+
+        if not path:
+            return result
+        else:
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            result.to_excel(path, index = False)

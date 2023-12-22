@@ -16,9 +16,9 @@ class Flowmap:
     Attributes
     ----------
     source_flows : list[Flow]
-        The list of source flows to be mapped.
+        The list of (unique) source flows to be mapped.
     source_flows_nomatch : list[Flow]
-        The list of source flows that do not match any rule.
+        The list of (unique) source flows that do not match any rule.
     target_flows : list[Flow]
         The list of target flows for mapping.
     target_flows_nomatch : list[Flow]
@@ -35,6 +35,8 @@ class Flowmap:
     ):
         """
         Initializes the Flowmap with source and target flows, along with optional matching rules.
+
+        Duplicated flows are removed from both source and targets lists.
 
         Parameters
         ----------
@@ -65,6 +67,7 @@ class Flowmap:
                         break
                 if not matched:
                     self.source_flows.append(flow)
+            self.source_flows = list(dict.fromkeys(self.source_flows))
 
             self.target_flows = []
             self.target_flows_nomatch = []
@@ -78,10 +81,11 @@ class Flowmap:
                         break
                 if not matched:
                     self.target_flows.append(flow)
+            self.target_flows = list(dict.fromkeys(self.target_flows))
         else:
-            self.source_flows = source_flows
+            self.source_flows = list(dict.fromkeys(source_flows))
             self.source_flows_nomatch = []
-            self.target_flows = target_flows
+            self.target_flows = list(dict.fromkeys(target_flows))
             self.target_flows_nomatch = []
 
     @cached_property

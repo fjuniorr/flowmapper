@@ -61,7 +61,7 @@ class Flowmap:
                         all_mappings.append(
                             {'from': s,
                              'to': t,
-                             'conversion_factor': s.unit.conversion_factor(t.unit),
+                             'conversion_factor': s.conversion_factor if s.conversion_factor else s.unit.conversion_factor(t.unit),
                              'match_rule': rule.__name__,
                              'match_rule_priority': self.rules.index(rule),
                              'info': is_match}
@@ -209,16 +209,16 @@ class Flowmap:
     def to_glad(self, ensure_id: bool = False):
         data = []
         for map_entry in self.mappings:
-            source_flow_id = map_entry['from'].uuid if map_entry['from'].uuid or not ensure_id else map_entry['from'].id
+            source_flow_id = map_entry['from'].uuid_raw_value if map_entry['from'].uuid_raw_value or not ensure_id else map_entry['from'].id
             row = {
-                    'SourceFlowName': map_entry['from'].name.raw_value,
+                    'SourceFlowName': map_entry['from'].name_raw_value,
                     'SourceFlowUUID': source_flow_id,
-                    'SourceFlowContext': map_entry['from'].context.raw_value,
-                    'SourceUnit': map_entry['from'].unit.raw_value,
+                    'SourceFlowContext': '/'.join(map_entry['from'].context_raw_value),
+                    'SourceUnit': map_entry['from'].unit_raw_value,
                     'MatchCondition': '',
                     'ConversionFactor': map_entry['conversion_factor'],
-                    'TargetFlowName': map_entry['to'].name.raw_value,
-                    'TargetFlowUUID': map_entry['to'].uuid,
+                    'TargetFlowName': map_entry['to'].name_raw_value,
+                    'TargetFlowUUID': map_entry['to'].uuid_raw_value,
                     'TargetFlowContext': map_entry['to'].context.raw_value,
                     'TargetUnit': map_entry['to'].unit.raw_value,
                     'MemoMapper': map_entry['info'].get('comment')

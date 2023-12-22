@@ -11,7 +11,7 @@ class Flowmap:
     """
     Crosswalk of flows from a source flow list to a target flow list.
 
-    This class provides functionalities to map and harmonize flow names, units, and other attributes from one flow list to another.
+    This class provides functionalities to map flows between different flow lists using a series of predefined match rules.
 
     Attributes
     ----------
@@ -90,6 +90,8 @@ class Flowmap:
         Generates and returns a list of mappings from source flows to target flows based on the defined rules.
 
         Each mapping includes the source flow, target flow, conversion factor, the rule that determined the match, and additional information.
+
+        A single match using the match rule with highest priority is returned for each source flow.
 
         Returns
         -------
@@ -310,7 +312,7 @@ class Flowmap:
 
     def to_randonneur(self):
         """
-        Export mappings with randonneur data migration file format.
+        Export mappings using randonneur data migration file format.
 
         Returns
         -------
@@ -329,7 +331,7 @@ class Flowmap:
 
     def to_glad(self, ensure_id: bool = False):
         """
-        Export mappings with GLAD flow mapping format, optionally ensuring each flow has an identifier.
+        Export mappings using GLAD flow mapping format, optionally ensuring each flow has an identifier.
 
         Formats the mapping results according to Global LCA Data Access (GLAD) network initiative flow mapping format.
 

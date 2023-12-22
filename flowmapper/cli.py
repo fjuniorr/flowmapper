@@ -86,11 +86,9 @@ def map(
             json.dump([flow.raw for flow in flowmap.unmatched_target], fs, indent=True)
 
     if format.value == 'randonneur':
-        with open(output_dir / f'{stem}.json', 'w') as fs:
-            json.dump(flowmap.to_randonneur(), fs, indent=2)
+        flowmap.to_randonneur(output_dir / f'{stem}.json')
     elif format.value == 'glad':
-        flowmap.to_glad().to_excel(output_dir / f'{stem}.xlsx', index = False)
+        flowmap.to_glad(output_dir / f'{stem}.xlsx')
     else:
-        with open(output_dir / f'{stem}.json', 'w') as fs:
-            json.dump(flowmap.to_randonneur(), fs, indent=2)
-        flowmap.to_glad().to_excel(output_dir / f'{stem}.xlsx', index = False)
+        flowmap.to_randonneur(output_dir / f'{stem}.json')
+        flowmap.to_glad(output_dir / f'{stem}.xlsx')

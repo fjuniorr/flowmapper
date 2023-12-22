@@ -55,6 +55,14 @@
       'name': 'Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore',
       'unit': 'kg',
     }),
+    dict({
+      'categories': list([
+        'Emissions to air',
+        'low. pop.',
+      ]),
+      'name': 'Ammonia, as N',
+      'unit': 'kg',
+    }),
   ])
 # ---
 # name: test_flowmap_mappings_ei39_ei310
@@ -246,6 +254,14 @@
         'low. pop.',
       ]),
       'name': 'Ammonia, FR',
+      'unit': 'kg',
+    }),
+    dict({
+      'categories': list([
+        'Emissions to air',
+        'low. pop.',
+      ]),
+      'name': 'Ammonia, as N',
       'unit': 'kg',
     }),
   ])

@@ -48,6 +48,14 @@
       'name': 'Ammonia, FR',
       'unit': 'kg',
     }),
+    dict({
+      'categories': list([
+        'Emissions to air',
+        'low. pop.',
+      ]),
+      'name': 'Ammonia, as N',
+      'unit': 'kg',
+    }),
   ])
 # ---
 # name: test_matched_flows_with_randonneur_transformations
@@ -76,6 +84,14 @@
         'low. pop.',
       ]),
       'name': 'Ammonia, FR',
+      'unit': 'kg',
+    }),
+    dict({
+      'categories': list([
+        'Emissions to air',
+        'low. pop.',
+      ]),
+      'name': 'Ammonia, as N',
       'unit': 'kg',
     }),
   ])

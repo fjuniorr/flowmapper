@@ -48,5 +48,13 @@
       "Emissions to air",
       "low. pop."
     ]
+  },
+  {
+    "name": "Ammonia, as N",
+    "unit": "kg",
+    "categories": [
+      "Emissions to air",
+      "low. pop."
+    ]
   }
 ]

@@ -5,6 +5,11 @@ from flowmapper.match import (
     match_identical_names,
 )
 
+def test_flowmap_remove_duplicates(source_flows, target_flows, snapshot):
+    flowmap = Flowmap(source_flows, target_flows)
+    actual = flowmap.source_flows
+    assert actual == snapshot
+
 def test_flowmap_mappings(source_flows, target_flows):
     flowmap = Flowmap(source_flows, target_flows)
     actual = flowmap.mappings[0]

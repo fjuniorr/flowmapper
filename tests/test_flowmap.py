@@ -1,5 +1,5 @@
 import pandas as pd
-from flowmapper.flowmap import Flowmap
+from flowmapper import Flowmap
 from flowmapper.match import (
     match_emissions_with_suffix_ion,
     match_identical_names,

@@ -266,6 +266,17 @@
     }),
   ])
 # ---
+# name: test_flowmap_remove_duplicates
+  list([
+    1,4-Butanediol (in kg) <Air/(unspecified)> [uuid:None],
+    1,4-Butanediol (in kg) <Air/high. pop.> [uuid:None],
+    Cesium-134 (in kBq) <Emissions to air/low. pop.> [uuid:None],
+    Cesium-134 (in kBq) <Emissions to soil/> [uuid:None],
+    Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore (in kg) <Resources/in ground> [uuid:None],
+    Ammonia, FR (in kg) <Emissions to air/low. pop.> [uuid:None],
+    Ammonia, as N (in kg) <Emissions to air/low. pop.> [uuid:None],
+  ])
+# ---
 # name: test_flowmap_to_randonneur
   list([
     dict({

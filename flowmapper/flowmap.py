@@ -68,6 +68,7 @@ class Flowmap:
                 if not matched:
                     self.source_flows.append(flow)
             self.source_flows = list(dict.fromkeys(self.source_flows))
+            self.source_flows_nomatch = list(dict.fromkeys(self.source_flows_nomatch))
 
             self.target_flows = []
             self.target_flows_nomatch = []
@@ -82,6 +83,7 @@ class Flowmap:
                 if not matched:
                     self.target_flows.append(flow)
             self.target_flows = list(dict.fromkeys(self.target_flows))
+            self.target_flows_nomatch = list(dict.fromkeys(self.target_flows_nomatch))
         else:
             self.source_flows = list(dict.fromkeys(source_flows))
             self.source_flows_nomatch = []
